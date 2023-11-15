@@ -2,23 +2,34 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration Form</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Kokoa Time</title>
+
+    <style>
+        @keyframes identifier {
+            0% {
+                transform: rotateY(0);
+            }
+            50% {
+                transform: rotateY(90deg) translateX(100px);
+                border-radius: 50%;
+                border-color: aquamarine;
+            }
+            100% {}
+        }
+        
+        img {
+            border: 10px solid black;
+            border-radius: 40%;
+            width: 250px;
+            animation: identifier 5s ease-in-out infinite;
+        }
+    </style>
 </head>
 
 <body>
-    <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username" required><br>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" required><br>
-
-        <label for="password">Password (min 10 digits):</label>
-        <input type="password" id="password" minlength="10" required><br>
-        <input type="submit" value="Create Account">
-    </form>
+    <img src="img/download.png" />
 </body>
 
 </html>
