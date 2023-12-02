@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
     padding: 0px 10px;
+    margin-bottom: -10px;
 }
 
 .user-component__avatar {
@@ -15,6 +16,7 @@
     height: 70px;
     border-radius: 30px;
     margin-right: 20px;
+    margin-bottom: px;
 }
 
 .user-component__title {
@@ -32,6 +34,7 @@
     width: 60px;
     height: 60px;
     border-radius: 25px;
+    margin-bottom: 30px;
 }
 
 .user-component__avatar--xl {
@@ -41,6 +44,7 @@
 
 .user-component__title--not-bold {
     font-weight: 300;
+    margin-bottom: 50px;
 }
 
 .user-component__column:last-child {
