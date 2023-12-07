@@ -7,7 +7,7 @@
 .user-component__column:first-child {
     display: flex;
     align-items: center;
-    padding: 0px 10px;
+    padding: 25px 0px;
     margin-bottom: -10px;
 }
 
@@ -15,8 +15,8 @@
     width: 70px;
     height: 70px;
     border-radius: 30px;
-    margin-right: 20px;
-    margin-bottom: px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 .user-component__title {
