@@ -13,13 +13,20 @@
     justify-content: space-between;
 }
 
+.nav__btn {
+    width: 5%;
+    text-align: center;
+}
+
 .nav__link {
     position: relative;
     color: #2e363e;
+    display: block;
 }
 
 .nav__notification {
     position: absolute;
-    left: 15px;
+    left: 50%;
+    transform: translateX(-20%);
     bottom: 15px;
 }
