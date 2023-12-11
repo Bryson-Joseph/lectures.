@@ -1,10 +1,20 @@
 .more-screen .icon-row {
     margin-top: 35px;
-    display: flex;
+    /* display: flex;
     padding-bottom: 25px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     justify-content: space-between;
-    flex-direction: column;
+    flex-direction: column; */
+}
+
+.more-suggestions {
+    margin-top: 50px;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    padding-top: 40px;
+}
+
+.more-suggestions__title {
+    margin-bottom: 30px;
 }
 
 .more-suggestions__icons {
