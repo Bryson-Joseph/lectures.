@@ -1,0 +1,1 @@
+body{padding:0;margin:0;display:grid;height:50vh;grid-template-columns:1fr 1fr 1fr 1fr;grid-template-rows:1fr 2fr 1fr;grid-template-areas:"b b b b" "a a a c" "d d d d"}
