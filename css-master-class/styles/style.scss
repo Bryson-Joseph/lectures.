@@ -1,24 +1,47 @@
-                        // @import "./reset.scss";
-                        body {
-                            height: 100vh;
-                            background-color: rebeccapurple;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                        
-                        .wrapper {
-                            max-width: 80%;
-                            background-color: black;
-                            height: 95%;
-                            padding: 40px;
-                            box-sizing: border-box;
-                            .grid {
-                                display: grid;
-                                grid-template-columns: 1.5fr 1fr;
-                                &>* {
-                                    background-color: white;
-                                    border-radius: 10px;
-                                }
-                            }
-                        }
+$gridGap:5px;
+$cellRadius:12px;
+body {
+    height: 100vh;
+    background-color: rebeccapurple;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    max-width: 80%;
+    background-color: black;
+    height: 95%;
+    padding: 40px;
+    box-sizing: border-box;
+    .grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        height: 100%;
+        gap: $gridGap;
+        header {
+            background-color: white;
+            border-radius: cellRadius;
+        }
+        .grid__col {
+            &:first-child {
+                display: grid;
+                background-color: black;
+                gap: $gridGap;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: 1.8fr 1fr;
+            }
+        }
+        .header {
+            grid-column: span 2;
+            border-radius: cellRadius;
+        }
+        .grid__img {
+            background-image: url("https://source.unsplash.com/random");
+            background-size: cover;
+            border-radius: cellRadius;
+        }
+    }
+}
+
+//
