@@ -1,7 +1,10 @@
-const title = document.querySelector('div.hello:first-child h1');
+const loginInput = document.querySelector('#login-form input')
+const loginForm = document.querySelector('#login-form')
 
-function handleTitle
+function onLoginSubmit(event) {
+  event.preventDefault()
+  console.log(loginInput.value)
+}
 
-title.addEventListener("click")
-console.log(title)
-    //
+loginForm.addEventListener('submit', onLoginSubmit)
+//
