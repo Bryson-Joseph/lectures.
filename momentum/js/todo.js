@@ -1,4 +1,4 @@
-const toDoForm = document.getElementById('tood-form')
+const toDoForm = document.getElementById('todo-form')
 const toDoInput = document.querySelector('#todo-form input')
 const toDoList = document.getElementById('todo-list')
 
@@ -29,13 +29,11 @@ function paintToDo(newTodo) {
   li.appendChild(button)
   toDoList.appendChild(li)
 }
-//
 
 function handleToDoSubmit(event) {
   event.preventDefault()
   const newTodo = toDoInput.value
   toDoInput.value = ''
-  paintToDo(newTodo)
   const newTodoObj = {
     text: newTodo,
     id: Date.now(),
@@ -43,5 +41,15 @@ function handleToDoSubmit(event) {
   toDos.push(newTodoObj)
   paintToDo(newTodoObj)
   saveToDos()
+}
+
+toDoForm.addEventListener('submit', handleToDoSubmit)
+
+const savedToDos = localStorage.getItem(TODOS_KEY)
+
+if (savedToDos !== null) {
+  const parsedToDos = JSON.parse(savedToDos)
+  toDos = parsedToDos
+  parsedToDos.forEach(paintToDo)
 }
 //
