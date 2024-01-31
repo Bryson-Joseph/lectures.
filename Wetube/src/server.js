@@ -1,9 +1,22 @@
 import express from 'express'
 
+const PORT = 40000
+
 const app = express()
 
-const handleListening = () => console.log('Server listening on port 40000 ')
+const gossipMiddleware = (req, res, next) => {
+  console.log(`Someone is going to: ${req.url}`)
+  next()
+}
 
-app.listen(40000, handleListening)
+const handleHome = (req, res) => {
+  return res.send('I love middlewares')
+}
+app.get('/', gossipMiddleware, handleHome)
+
+const handleListening = () =>
+  console.log(`Server listening on port https://localhost:${PORT}  `)
+
+app.listen(PORT, handleListening)
 
 //
