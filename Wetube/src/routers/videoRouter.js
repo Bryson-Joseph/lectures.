@@ -2,6 +2,10 @@ import express from 'express'
 
 const videoRouter = express.Router()
 
-const handleWatchVideo = (req, res) => res.send('Watch video') 9
+const handleWatch = (req, res) => res.send('Watch video')
+const handleEdit = (req, res) => res.send('Edit Video')
 
-videoRouter.get('/watch', handleWatchVideo)
+videoRouter.get('/watch', handleWatch)
+videoRouter.get('/edit', handleEdit)
+
+export default videoRouter
