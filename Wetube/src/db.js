@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+console.log('Db..js')
+
 mongoose.connect('mongodb://127.0.0.1:27017/Wetube', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
