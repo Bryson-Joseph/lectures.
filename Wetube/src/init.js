@@ -1,7 +1,8 @@
-import './db'
-import './models/video'
+import connectDB from './db'
 import app from './server'
+import './models/Video'
 
+connectDB()
 const PORT = 400
 
 const handleListening = () =>
