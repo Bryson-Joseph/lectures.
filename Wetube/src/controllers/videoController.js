@@ -1,7 +1,7 @@
 import Video, { formatHashtags } from '../models/Video'
 
 export const home = async (req, res) => {
-  const videos = await Video.find({})
+  const videos = await Video.find({}).sort({ createtAt: 'asc' })
   return res.render('home', { pageTitle: 'Home', videos })
 }
 
