@@ -1,6 +1,7 @@
 import connectDB from './db'
-import app from './server'
 import './models/Video'
+import './models/User'
+import app from './server'
 
 connectDB()
 const PORT = 400
