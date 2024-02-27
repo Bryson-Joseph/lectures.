@@ -2,11 +2,12 @@ import express from 'express'
 import {
   getJoin,
   postJoin,
-  login,
+  // login,
   getLogin,
   postLogin,
 } from '../controllers/userController'
 import { home, search } from '../controllers/videoController'
+// import { get } from 'mongoose'
 
 const rootRouter = express.Router()
 
