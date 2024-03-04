@@ -18,14 +18,20 @@ app.use(express.urlencoded({ extended: true }))
 app.use(
   session({
     secret: 'Hello!',
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 20000,
+    },
+
     store: MongoStore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/Wetube' }),
   })
 )
 
-// app.use(localsMiddleware)
+app.use(localsMiddleware)
+
 app.use('/', rootRouter)
 app.use('/videos', videoRouter)
 app.use('/users', userRouter)
+
 export default app
