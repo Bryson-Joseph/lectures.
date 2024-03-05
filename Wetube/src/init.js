@@ -1,3 +1,4 @@
+require('dotenv').config()
 import connectDB from './db'
 import './models/Video'
 import './models/User'
