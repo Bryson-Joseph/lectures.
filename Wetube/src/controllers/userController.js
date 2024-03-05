@@ -1,5 +1,6 @@
-import { application } from 'express'
+// import { application } from 'express'
 import User from '../models/User'
+import fetch from 'node-fetch'
 import bcrypt from 'bcrypt'
 
 export const getJoin = (req, res) => res.render('join', { pageTitle: 'Join' })
@@ -73,24 +74,41 @@ export const startGithubLogin = (req, res) => {
   const finalUrl = `${baseUrl}?${params}`
   return res.redirect(finalUrl)
 }
-
 export const finishGithubLogin = async (req, res) => {
-  const baseUrl = 'https://github.com/login/oauth/acsess_token'
-  const config = {
-    client_id: process.env.GH_CLIENT,
-    client_secret: process.env.GH_SECRET,
-    code: req.query.code,
+  try {
+    const baseUrl = 'https://github.com/login/oauth/access_token'
+    const config = {
+      client_id: process.env.GH_CLIENT,
+      client_secret: process.env.GH_SECRET,
+      code: req.query.code,
+    }
+    const params = new URLSearchParams(config).toString()
+    const finalUrl = `${baseUrl}?${params}`
+
+    const tokenRequest = await fetch(finalUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+
+    const tokenData = await tokenRequest.json()
+
+    if ('access_token' in tokenData) {
+      const { access_token } = tokenData
+
+      const userRequest = await fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    } else {
+      return res.redirect('/login')
+    }
+  } catch (error) {
+    console.error(error)
+    return res.redirect('/login')
   }
-  const params = new URLSearchParams(config).toString()
-  const finalUrl = `${baseUrl}?${params}`
-  const data = await fetch(finalUrl, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-    },
-  })
-  const json = await data.json()
-  console.log(json)
 }
 
 export const edit = (req, res) => res.send('Edit User')
