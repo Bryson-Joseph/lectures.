@@ -13,11 +13,9 @@ html(lang="Eng")
                     a(href="/") Home
                 if loggedIn
                     li 
-                        a(href="/logout") Log Out 
-                    li
-                        a(href="/users/logout") Log Out User
+                        a(href="/users/edit") Edit Profile 
                     li 
-                        a(href="/my-profile") #{loggedInUser.name} Profile 
+                        a(href="/users/logout") Log out 
                 else
                     li 
                         a(href="/join") Join
