@@ -162,8 +162,15 @@ export const postEdit = async (req, res) => {
     },
     { new: true }
   )
-  req.session.user = findByIdAndUpdate
+  req.session.user = updatedUser
   return res.redirect('/users/edit')
+}
+
+export const getChangePassword = (req, res) => {
+  return res.render('users/change-password', { pageTitle: 'Change Password' })
+}
+export const postChangePassword = (req, res) => {
+  return res.redirect('/')
 }
 
 export const see = (req, res) => res.send('See User')
