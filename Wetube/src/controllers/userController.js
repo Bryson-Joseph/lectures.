@@ -44,7 +44,7 @@ export const getLogin = (req, res) =>
 export const postLogin = async (req, res) => {
   const { username, password } = req.body
   const pageTitle = 'Login'
-  const exists = await User.exists({ username, socialOnly: false })
+  const exists = await User.findOne({ username, socialOnly: false })
   if (!exists) {
     return res.status(400).render('login', {
       pageTitle: 'Login',
@@ -169,6 +169,9 @@ export const postEdit = async (req, res) => {
 }
 
 export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect('/')
+  }
   return res.render('users/change-password', { pageTitle: 'Change Password' })
 }
 export const postChangePassword = async (req, res) => {
@@ -186,9 +189,33 @@ export const postChangePassword = async (req, res) => {
       errorMessage: 'The current password is incorrect',
     })
   }
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render('users/change-password', {
+      pageTitle: 'Change Password',
+      errorMessage: 'The current password is incorrect',
+    })
+  }
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render('users/change-password', {
+      pageTitle: 'Change Password',
+      errorMessage: 'The password does not match the confirmation',
+    })
+  }
   user.password = newPassword
   await user.save()
   return res.redirect('/users/logout')
 }
 
-export const see = (req, res) => res.send('See User')
+export const see = async (req, res) => {
+  const { id } = req.params
+  const user = await User.findById(id)
+  if (!user) {
+    return res.status(404).render('404', {
+      pageTitle: 'User not found.',
+    })
+  }
+  return res.render('users/profile', {
+    pageTitle: user.name,
+    user,
+  })
+}
