@@ -214,7 +214,7 @@ export const see = async (req, res) => {
       pageTitle: 'User not found.',
     })
   }
-  return res.render('users/profile', {
+  return res.render('/users/profil', {
     pageTitle: user.name,
     user,
   })

@@ -7,6 +7,7 @@ import {
   postLogin,
 } from '../controllers/userController'
 import { home, search } from '../controllers/videoController'
+import { publicOnlyMiddleware } from '../middlewares'
 // import { get } from 'mongoose'
 
 const rootRouter = express.Router()
