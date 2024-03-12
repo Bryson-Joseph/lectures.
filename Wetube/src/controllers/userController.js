@@ -45,8 +45,8 @@ export const getLogin = (req, res) =>
 export const postLogin = async (req, res) => {
   const { username, password } = req.body
   const pageTitle = 'Login'
-  const exists = await User.findOne({ username, socialOnly: false })
-  if (!exists) {
+  const user = await User.findOne({ username, socialOnly: false })
+  if (!user) {
     return res.status(400).render('login', {
       pageTitle: 'Login',
       errorMessage: 'An account with this username does not exists.',
@@ -102,7 +102,6 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json()
-    console.log(userData)
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -215,10 +214,8 @@ export const see = async (req, res) => {
       pageTitle: 'User not found.',
     })
   }
-  // const videos = await Video.find({ owner: user._id })
-  return res.render('/users/profile', {
+  return res.render('users/profile', {
     pageTitle: user.name,
     user,
-    // videos,
   })
 }
