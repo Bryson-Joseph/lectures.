@@ -4,6 +4,7 @@ html(lang="Eng")
       block Head
        title #{pageTitle} | #{siteName}
        link(rel="stylesheet" href="https://unpkg.com/mvp.css")
+       link(rel="stylesheet" href="/static/css/styles.css")
        body   
         header 
          h1=pageTitle
@@ -31,5 +32,7 @@ html(lang="Eng")
                     a(href="/search") Search 
        main                                 
         block content
+
        include partials/footer
+       script(src="/static/js/main.js")
         
