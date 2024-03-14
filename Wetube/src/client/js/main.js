@@ -1,3 +1,2 @@
 import '../scss/styles.scss'
-
-alert('hi')
+alert('it works')
