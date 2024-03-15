@@ -1,8 +1,10 @@
-import Video from '../models/video'
+import Video from '../models/Video'
 import User from '../models/User'
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createtAt: 'desc' })
+  const videos = await Video.find({})
+    .sort({ createdAt: 'desc' })
+    .populate('owner')
   return res.render('home', { pageTitle: 'Home', videos })
 }
 
@@ -12,10 +14,7 @@ export const watch = async (req, res) => {
   if (!video) {
     return res.render('404', { pageTitle: 'Video not found.' })
   }
-  return res.render('watch', {
-    pageTitle: video.title,
-    video,
-  })
+  return res.render('watch', { pageTitle: video.title, video })
 }
 
 export const getEdit = async (req, res) => {
@@ -25,7 +24,7 @@ export const getEdit = async (req, res) => {
   } = req.session
   const video = await Video.findById(id)
   if (!video) {
-    return res.status('404', { pageTitle: 'Video not found.' })
+    return res.status(404).render('404', { pageTitle: 'Video not found.' })
   }
   if (String(video.owner) !== String(_id)) {
     return res.status(403).redirect('/')
@@ -41,7 +40,7 @@ export const postEdit = async (req, res) => {
   const { title, description, hashtags } = req.body
   const video = await Video.exists({ _id: id })
   if (!video) {
-    return res.render('404', { pageTitle: 'Video not found.' })
+    return res.status(404).render('404', { pageTitle: 'Video not found.' })
   }
   if (String(video.owner) !== String(_id)) {
     return res.status(403).redirect('/')
@@ -92,7 +91,7 @@ export const deleteVideo = async (req, res) => {
   } = req.session
   const video = await Video.findById(id)
   if (!video) {
-    return res.status(404).render('404', { pageTitle: 'Video not found..' })
+    return res.status(404).render('404', { pageTitle: 'Video not found.' })
   }
   if (String(video.owner) !== String(_id)) {
     return res.status(403).redirect('/')
@@ -109,7 +108,7 @@ export const search = async (req, res) => {
       title: {
         $regex: new RegExp(`${keyword}$`, 'i'),
       },
-    })
+    }).populate('owner')
   }
   return res.render('search', { pageTitle: 'Search', videos })
 }

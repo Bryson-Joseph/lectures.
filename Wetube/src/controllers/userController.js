@@ -1,5 +1,4 @@
 import User from '../models/User'
-import Video from '../models/video'
 import fetch from 'node-fetch'
 import bcrypt from 'bcrypt'
 
@@ -13,13 +12,11 @@ export const postJoin = async (req, res) => {
       errorMessage: 'Password confirmation does not match.',
     })
   }
-  const exists = await User.exists({
-    $or: [{ username }, { email }],
-  })
+  const exists = await User.exists({ $or: [{ username }, { email }] })
   if (exists) {
     return res.status(400).render('join', {
       pageTitle,
-      errorMessage: 'This username/email is already taken.. ',
+      errorMessage: 'This username/email is already taken.',
     })
   }
   try {
@@ -38,7 +35,6 @@ export const postJoin = async (req, res) => {
     })
   }
 }
-
 export const getLogin = (req, res) =>
   res.render('login', { pageTitle: 'Login' })
 
@@ -48,11 +44,11 @@ export const postLogin = async (req, res) => {
   const user = await User.findOne({ username, socialOnly: false })
   if (!user) {
     return res.status(400).render('login', {
-      pageTitle: 'Login',
+      pageTitle,
       errorMessage: 'An account with this username does not exists.',
     })
   }
-  const ok = await bcrypt.compare(password, User.password)
+  const ok = await bcrypt.compare(password, user.password)
   if (!ok) {
     return res.status(400).render('login', {
       pageTitle,
@@ -60,12 +56,12 @@ export const postLogin = async (req, res) => {
     })
   }
   req.session.loggedIn = true
-  req.session.user = User
+  req.session.user = user
   return res.redirect('/')
 }
 
 export const startGithubLogin = (req, res) => {
-  const baseUrl = `https://github.com/login/oauth/authorize`
+  const baseUrl = 'https://github.com/login/oauth/authorize'
   const config = {
     client_id: process.env.GH_CLIENT,
     allow_signup: false,
@@ -75,6 +71,7 @@ export const startGithubLogin = (req, res) => {
   const finalUrl = `${baseUrl}?${params}`
   return res.redirect(finalUrl)
 }
+
 export const finishGithubLogin = async (req, res) => {
   const baseUrl = 'https://github.com/login/oauth/access_token'
   const config = {
@@ -109,17 +106,17 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json()
-
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     )
     if (!emailObj) {
+      // set notification
       return res.redirect('/login')
     }
     let user = await User.findOne({ email: emailObj.email })
     if (!user) {
       user = await User.create({
-        avatarUrl: userData.avatar_Url,
+        avatarUrl: userData.avatar_url,
         name: userData.name,
         username: userData.login,
         email: emailObj.email,
@@ -140,7 +137,6 @@ export const logout = (req, res) => {
   req.session.destroy()
   return res.redirect('/')
 }
-
 export const getEdit = (req, res) => {
   return res.render('edit-profile', { pageTitle: 'Edit Profile' })
 }
@@ -152,7 +148,6 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
     file,
   } = req
-
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
@@ -192,12 +187,6 @@ export const postChangePassword = async (req, res) => {
   if (newPassword !== newPasswordConfirmation) {
     return res.status(400).render('users/change-password', {
       pageTitle: 'Change Password',
-      errorMessage: 'The current password is incorrect',
-    })
-  }
-  if (newPassword !== newPasswordConfirmation) {
-    return res.status(400).render('users/change-password', {
-      pageTitle: 'Change Password',
       errorMessage: 'The password does not match the confirmation',
     })
   }
@@ -208,11 +197,15 @@ export const postChangePassword = async (req, res) => {
 
 export const see = async (req, res) => {
   const { id } = req.params
-  const user = await User.findById(id).populate('videos')
+  const user = await User.findById(id).populate({
+    path: 'videos',
+    populate: {
+      path: 'owner',
+      model: 'User',
+    },
+  })
   if (!user) {
-    return res.status(404).render('404', {
-      pageTitle: 'User not found.',
-    })
+    return res.status(404).render('404', { pageTitle: 'User not found.' })
   }
   return res.render('users/profile', {
     pageTitle: user.name,
