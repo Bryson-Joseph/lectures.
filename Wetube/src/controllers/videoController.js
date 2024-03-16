@@ -1,4 +1,4 @@
-import Video from '../models/Video'
+import Video from '../models/video'
 import User from '../models/User'
 
 export const home = async (req, res) => {
