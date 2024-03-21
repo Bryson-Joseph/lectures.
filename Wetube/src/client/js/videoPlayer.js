@@ -8,7 +8,7 @@ const currenTime = document.getElementById('currenTime')
 const totalTime = document.getElementById('totalTime')
 const timeline = document.getElementById('timeline')
 const fullScreenBtn = document.getElementById('fullScreen')
-const fullScreenBtnIcon = fullScreenBtn.querySelector('i')
+const fullScreenIcon = fullScreenBtn.querySelector('i')
 const videoContainer = document.getElementById('videoContainer')
 const videoControls = document.getElementById('videoControls')
 
@@ -51,7 +51,7 @@ const handleVolumeChange = (event) => {
 }
 
 const formatTime = (seconds) =>
-  new Date(seconds * 1000).toISOString().substr(14, 8)
+  new Date(seconds * 1000).toISOString().substr(14, 5)
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration))
@@ -87,6 +87,10 @@ const handleMouseMove = () => {
   if (controlsTimeout) {
     clearTimeout(controlsTimeout)
     controlsTimeout = null
+  }
+  if (controlsMovementTimeout) {
+    clearTimeout(controlsMovementTimeout)
+    controlsMovementTimeout = null
   }
   videoControls.classList.add('showing')
   controlsMovementTimeout = setTimeout(hideControls, 3000)
