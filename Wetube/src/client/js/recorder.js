@@ -3,10 +3,11 @@ const preview = document.getElementsById('preview')
 
 const handleStart = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({
-    audio: true,
+    audio: false,
     video: true,
   })
-  video.srcObject
+  video.srcObject = stream
+  video.play()
 }
 
 startBtn.addEventListener('click', handleStart)
