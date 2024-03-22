@@ -32,6 +32,7 @@ const handleStart = () => {
     video.loop = true
     video.play()
   }
+  recorder.start()
 }
 
 const init = async () => {
