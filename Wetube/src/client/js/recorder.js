@@ -1,5 +1,5 @@
 const startBtn = document.getElementById('startBtn')
-const video = document.getElementsById('preview')
+const video = document.getElementById('preview')
 
 let stream
 let recorder
@@ -9,7 +9,7 @@ const handleDownload = () => {
   const a = document.createElement('a')
   a.href = videoFile
   a.download = 'MyRecording.webm'
-  document.body.appedingChild(a)
+  document.body.appendChild(a)
   a.click()
 }
 
