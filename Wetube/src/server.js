@@ -2,6 +2,7 @@ require('dotenv').config()
 import express from 'express'
 import morgan from 'morgan'
 import session from 'express-session'
+import flash from 'express-flash'
 import MongoStore from 'connect-mongo'
 import rootRouter from './routers/rootRouter'
 import videoRouter from './routers/videoRouter'
@@ -18,6 +19,7 @@ app.use(logger)
 app.use(express.urlencoded({ extended: true }))
 app.use('/api', apiRouter)
 
+app.use(flash())
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
