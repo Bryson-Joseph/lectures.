@@ -2,6 +2,7 @@ require('dotenv').config()
 import connectDB from './db'
 import './models/video'
 import './models/User'
+import './models/Comment'
 import app from './server'
 
 connectDB()
