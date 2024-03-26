@@ -1,3 +1,4 @@
+import 'regenerator-runtime'
 require('dotenv').config()
 import connectDB from './db'
 import './models/video'
