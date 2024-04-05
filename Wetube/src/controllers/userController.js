@@ -136,7 +136,7 @@ export const finishGithubLogin = async (req, res) => {
 export const logout = (req, res) => {
   req.session.destroy()
   req.flash('info', 'Bye Bye')
-  return res.redirect('/')
+  return res.redirect('')
 }
 export const getEdit = (req, res) => {
   return res.render('edit-profile', { pageTitle: 'Edit Profile' })
@@ -152,7 +152,7 @@ export const postEdit = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? file.location : avatarUrl,
       name,
       email,
       username,
@@ -194,7 +194,7 @@ export const postChangePassword = async (req, res) => {
   }
   user.password = newPassword
   await user.save()
-  req.flash('info', 'password updated')
+  req.flash('info', 'Password updated')
   return res.redirect('/users/logout')
 }
 

@@ -1,19 +1,14 @@
 import mongoose from 'mongoose'
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/Wetube'
+mongoose.connect('mongodb://localhost:27017/myapp', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/Wetube', {
-      useNewUrlParser: true,
-      // useUnifiedTopology: true,
-      // useFindAndModify: false,
-    })
-    console.log('Connected to MongoDB')
-  } catch (error) {
-    console.error('MongoDB connection error:', error)
-    process.exit(1)
-  }
-}
+const db = mongoose.connection
 
-export default connectDB
+const handleOpen = () => console.log('✅ Connected to DB')
+const handleError = (error) => console.log('❌ DB Error', error)
+
+db.on('error', handleError)
+db.once('open', handleOpen)
