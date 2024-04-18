@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <div id="root"></div>
-  </body>
-  <script src="https://www.unpkg.com/react@16.7.0/umd/react.production.min.js"></script>
-  <script src="https://www.unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="text/babel">
-    const root = document.getElementById('root') let counter = 0; function countUp() { setCount(count + 1) } const Container = () => (
-    <div>
-        <h3>Total clicks: {count}</h3>
-        <button onClick={countUp}>Click me</button>
-    </div>
-    ); ReactDOM.render(
 
-    <Counter />, root)
-  </script>
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    const root = document.getElementById('root'); function App() { const [minutes, setMinutes] = React.useState(''); const onChange = () => { console.log('somebody wrote'); }; return (
+    <div>
+        <h1 className="hi">Super Converter</h1>
+        <label htmlFor="minutes">Minutes</label>
+        <input value={minutes} id="minutes" placeholder="Minutes" type="number" onChange={onChange} />
+        <label htmlFor="hours">Hours</label>
+        <input id="hours" placeholder="Hours" type="number" />
+    </div>
+    ); } ReactDOM.render(
+    <App />, root);
+</script>
+
 </html>
