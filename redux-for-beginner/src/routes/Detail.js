@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 function Detail({ toDo }) {
   return (
@@ -11,12 +12,14 @@ function Detail({ toDo }) {
 }
 
 function mapStateToProps(state, ownProps) {
-  const {
-    match: {
-      params: { id },
-    },
-  } = ownProps
-  return { toDo: state.find((toDo) => toDo.id === parseInt(id)) }
+  return { toDo: state.find((toDo) => toDo.id === parseInt(ownProps.id)) }
 }
 
-export default connect(mapStateToProps)(Detail)
+const ConnectedDetail = connect(mapStateToProps)(Detail)
+
+const ParentComponent = () => {
+  const { id } = useParams()
+  return <ConnectedDetail id={id} />
+}
+
+export default ParentComponent
