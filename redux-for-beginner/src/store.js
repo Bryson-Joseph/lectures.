@@ -1,26 +1,16 @@
-import { configureStore, createAction, createReducer } from '@reduxjs/toolkit'
+import { configureStore, createSlice } from '@reduxjs/toolkit'
 
-const addToDo = createAction('ADD')
-const deleteToDo = createAction('DELETE')
-
-const initialState = []
-const reducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(addToDo, (state, action) => {
+const toDos = createSlice({
+  name: 'toDosReducer',
+  initialState: [],
+  reducers: {
+    add: (state, action) => {
       state.push({ text: action.payload, id: Date.now() })
-    })
-    .addCase(deleteToDo, (state, action) => {
-      return state.filter((toDo) => toDo.id !== action.payload)
-    })
+    },
+    remove: (state, action) =>
+      state.filter((toDo) => toDo.id !== action.payload),
+  },
 })
 
-const store = configureStore({
-  reducer,
-})
-
-export const actionCreators = {
-  addToDo,
-  deleteToDo,
-}
-
-export default store
+export const { add, remove } = toDos.actions
+export default configureStore({ reducer: toDos.reducer })
