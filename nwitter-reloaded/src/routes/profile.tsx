@@ -44,21 +44,6 @@ const AvatarInput = styled.input`
 const Name = styled.span`
   font-size: 22px;
 `
-const EditButton = styled.button`
-  background-color: #1d9bf0;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-`
-const EditNameInput = styled.input`
-  width: 200px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 10px;
-`
 
 const Tweets = styled.div`
   display: flex;
@@ -71,9 +56,6 @@ export default function Profile() {
   const user = auth.currentUser
   const [avatar, setAvatar] = useState(user?.photoURL)
   const [tweets, setTweets] = useState<ITweet[]>([])
-  const [editingName, setEditingName] = useState(false)
-  const [newName, setNewName] = useState(user?.displayName ?? 'Anonymous')
-
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
     if (!user) return
@@ -88,19 +70,6 @@ export default function Profile() {
       })
     }
   }
-
-  const handleEditName = () => {
-    setEditingName(!editingName)
-  }
-
-  const handleSaveName = async () => {
-    if (newName.trim() === '') return
-    await updateProfile(user, {
-      displayName: newName,
-    })
-    setEditingName(false)
-  }
-
   const fetchTweets = async () => {
     const tweetQuery = query(
       collection(db, 'tweets'),
@@ -122,11 +91,9 @@ export default function Profile() {
     })
     setTweets(tweets)
   }
-
   useEffect(() => {
     fetchTweets()
   }, [])
-
   return (
     <Wrapper>
       <AvatarUpload htmlFor="avatar">
@@ -148,20 +115,7 @@ export default function Profile() {
         type="file"
         accept="image/*"
       />
-      {editingName ? (
-        <>
-          <EditNameInput
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-          />
-          <button onClick={handleSaveName}>Save</button>
-        </>
-      ) : (
-        <>
-          <Name>{user?.displayName ?? 'Anonymous'}</Name>
-          <EditButton onClick={handleEditName}>Edit Name</EditButton>
-        </>
-      )}
+      <Name>{user?.displayName ?? 'Anonymous'}</Name>
       <Tweets>
         {tweets.map((tweet) => (
           <Tweet key={tweet.id} {...tweet} />
