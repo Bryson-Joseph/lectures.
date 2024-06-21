@@ -1,10 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
 class Block {
-    constructor(prevHash, height, data) {
-        this.prevHash = prevHash;
-        this.height = height;
-        this.data = data;
-        this.hash = Block.calculateHash(prevHash, height, data);
-    }
+  constructor(prevHash, height, data) {
+    this.prevHash = prevHash
+    this.height = height
+    this.data = data
+    this.hash = Block.calculateHash(prevHash, height, data)
+  }
 }
