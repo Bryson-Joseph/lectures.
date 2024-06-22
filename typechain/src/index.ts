@@ -79,4 +79,16 @@ blockchain.addBlock("Fourth one");
 
 blockchain.getBlocks().push(new Block("fffff", 99999, "Hackedddddd"))
 
-console.log(blockchain.getBlocks());
+console.log(blockchain.getBlocks()); 
+ 
+    
+
+                                         
+
+                                                
+                                     
+                          
+                                                                                                                                                                                                                                                                          
+
+                
+                                
