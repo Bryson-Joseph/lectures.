@@ -1,7 +1,10 @@
-import React from 'react'
+import styled from "styled-components"
+
+const Title = styled.h1`
+color: ${(props) => props.theme.accentColor}`
 
 function Coins() {
-  return <h1>All Coins</h1>
+  return <Title >All Coins</Title >
 }
 
 export default Coins
