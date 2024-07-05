@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useLocation, useParams } from 'react-router'
+import { useEffect, useState } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Title = styled.h1`
@@ -25,23 +25,36 @@ const Header = styled.header`
   align-items: center;
 `
 
-interface RouteParams {
-  coinId: string
-}
-interface RouteState {
-  name: string
-}
-
 function Coin() {
   const [loading, setLoading] = useState(true)
   const { coinId } = useParams()
   const { state } = useLocation()
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const infoData = await (
+          await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+        ).json()
+        const priceData = await (
+          await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+        ).json()
+        setLoading(false)
+      } catch (error) {
+        setError('Failed to fetch data from the API')
+        setLoading(false)
+      }
+    })()
+  }, [coinId])
+
   return (
     <Container>
       <Header>
-        <Title>{state?.name || 'loading....'}</Title>
+        <Title>{state?.name || 'Loading...'}</Title>
       </Header>
-      {loading ? <Loader>Loading....</Loader> : null}
+      {loading ? <Loader>Loading...</Loader> : null}
+      {error ? <p>{error}</p> : null}
     </Container>
   )
 }
