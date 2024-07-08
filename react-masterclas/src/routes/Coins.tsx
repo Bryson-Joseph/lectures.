@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -17,7 +16,11 @@ const Header = styled.header`
   align-items: center;
 `
 
-const CoinsList = styled.ul``
+const CoinsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`
 
 const Coin = styled.li`
   background-color: white;
@@ -59,6 +62,7 @@ interface ICoin {
   symbol: string
   rank: number
   is_new: boolean
+  is_active: boolean
   type: string
 }
 
@@ -67,7 +71,7 @@ function Coins() {
   return (
     <Container>
       <Header>
-        <Title>All Coins</Title>
+        <Title>Coin</Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
@@ -75,11 +79,18 @@ function Coins() {
         <CoinsList>
           {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`} state={{ name: coin.name }}>
+              <Link
+                to={
+                  {
+                    pathname: `/${coin.id}`,
+                    state: { name: coin.name },
+                  } as { pathname: string; state: { name: string } }
+                }>
                 <Img
-                  src={`https://iconduck.com/sets/cryptocurrency-icons${coin.symbol.toLowerCase()}`}
+                  src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  alt={coin.name}
                 />
-                {coin.name} &rarr
+                {coin.name} &rarr;
               </Link>
             </Coin>
           ))}
