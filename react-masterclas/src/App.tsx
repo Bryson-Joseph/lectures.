@@ -5,7 +5,7 @@ import {
   useTransform,
   useViewportScroll,
 } from 'framer-motion'
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 
 const Wrapper = styled(motion.div)`
   height: 200vh;
