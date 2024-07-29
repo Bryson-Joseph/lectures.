@@ -169,7 +169,7 @@ function Home() {
   const bigMovieMatch = useMatch('/movies/:movieId')
   const { scrollY } = useViewportScroll()
   const { data, isLoading } = useQuery<IGetMoviesResult>(
-    ['movies', 'nowPlaying'],
+    ['movies', 'nowPlaying', 'popular'],
     getMovies
   )
   const [index, setIndex] = useState(0)
