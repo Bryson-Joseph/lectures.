@@ -11,12 +11,25 @@ let tweets = [
   },
 ]
 
+let users = [
+  {
+    id: '1',
+    firstName: 'Jeffrey',
+    lastName: 'jefferson',
+  },
+  {
+    id: '2',
+    firstName: 'Elon',
+    lastName: 'Musk',
+  },
+]
+
 const typeDefs = gql`
   type User {
     id: ID!
-    username: String!
     firstName: String!
     lastName: String!
+    fullName:String!
   }
 
   type Tweet {
@@ -26,6 +39,7 @@ const typeDefs = gql`
   }
 
   type Query {
+  allUsers:[User!]
     allTweets: [Tweet!]!
     tweet(id: ID): Tweet
   }
@@ -47,7 +61,9 @@ const resolvers = {
       return tweets.find((tweet) => tweet.id === id)
     },
   },
-
+allUsers(){
+  console.log("allUsers called")
+}
   Mutation: {
     postTweet(_, { text, userId }) {
       const newTweet = {
@@ -64,6 +80,13 @@ const resolvers = {
       return true
     },
   },
+
+User:{
+  fullName({firstName, lastName}){
+    return `${firstName} ${lastName}`
+  }
+}
+
 }
 
 const server = new ApolloServer({ typeDefs, resolvers })
