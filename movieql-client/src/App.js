@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Movies from './routes/Movies'
-import Movie from './routes/Movie'
+import Movies from './Routes/Movies'
+import Movie from './Routes/Movie'
 
 export default function App() {
   return (
