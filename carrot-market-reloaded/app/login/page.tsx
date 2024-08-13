@@ -3,7 +3,6 @@
 import FormInput from '../components/form-input'
 import FormButton from '../components/form-btn'
 import SocialLogin from '../components/social-login'
-import { redirect } from 'next/navigation'
 import { useFormState } from 'react-dom'
 import { handleForm } from './action'
 
@@ -16,19 +15,12 @@ export default function LogIn() {
         <h2 className="text-xl">Log In with Email and Password.</h2>
       </div>
       <form action={action} className="flex flex-col gap-3">
-        <FormInput
-          name="email"
-          type="email"
-          placeholder="Email"
-          required
-          errors={[]}
-        />
+        <FormInput name="email" type="email" placeholder="Email" required />
         <FormInput
           name="password"
           type="password"
           placeholder="Password"
           required
-          errors={state?.errors ?? []}
         />
         <FormButton text="Log in" />
       </form>
