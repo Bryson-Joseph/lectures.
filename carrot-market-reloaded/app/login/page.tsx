@@ -5,6 +5,7 @@ import FormButton from '../components/form-btn'
 import SocialLogin from '../components/social-login'
 import { useFormState } from 'react-dom'
 import { handleForm } from './action'
+import { redirect } from 'next/navigation'
 
 export default function LogIn() {
   const [state, action] = useFormState(handleForm, null)
@@ -27,4 +28,5 @@ export default function LogIn() {
       <SocialLogin />
     </div>
   )
+  redirect('/sms')
 }

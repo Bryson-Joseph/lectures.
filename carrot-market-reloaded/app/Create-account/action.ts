@@ -1,6 +1,9 @@
 'use server'
-import { redirect } from 'next/navigation'
 import { z } from 'zod'
+
+const passwordRegex = new RegExp(
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*?[#?!@$^&*-].+$)/
+)
 
 const formSchema = z
   .object({
@@ -10,14 +13,23 @@ const formSchema = z
         required_error: 'Where is my username???',
       })
       .min(3, 'Way too short!!!')
-      .max(10, 'That is too long!')
+      // .max(10, 'That is too long!')
+      .trim()
+      .toLowerCase()
+      .transform((username) => `🔥 ${username}`)
       .refine(
         (username) => !username.includes('potato'),
         'No potatoes allowed!'
       ),
-    email: z.string().email(),
-    password: z.string().min(10),
-    confirm_password: z.string().min(10),
+    email: z.string().email().toLowerCase(),
+    password: z
+      .string()
+      .min(4)
+      .regex(
+        passwordRegex,
+        'Password must contain at least one UPPERCASE,lowercase,number and special characters #?!$%^&*-'
+      ),
+    confirm_password: z.string().min(4),
   })
   .superRefine(({ password, confirm_password }, ctx) => {
     if (password !== confirm_password) {
@@ -38,5 +50,7 @@ export async function createAccount(prevState: any, formData: FormData) {
   const result = formSchema.safeParse(data)
   if (!result.success) {
     return result.error.flatten()
+  } else {
+    console.log(result.data)
   }
 }
