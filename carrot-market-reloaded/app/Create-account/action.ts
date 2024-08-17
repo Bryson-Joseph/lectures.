@@ -10,6 +10,7 @@ import bcrypt from 'bcrypt'
 import { getIronSession } from 'iron-session'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import getSession from '../lib/session'
 
 const checkUsername = (username: string) => !username.includes('potato')
 
@@ -92,6 +93,7 @@ export async function createAccount(prevState: any, formData: FormData) {
   }
   // we add await in our const result so that it should work with the database
   const result = await formSchema.safeParseAsync(data)
+  // We change so that zod adds the await in all the function we created that need to have an await.
   if (!result.success) {
     return result.error.flatten()
   } else {
@@ -111,13 +113,10 @@ export async function createAccount(prevState: any, formData: FormData) {
     })
     console.log(user)
     // log the user in
-    const cookie = await getIronSession(cookies(), {
-      cookieName: 'delicious-carrot',
-      password: process.env.COOKIE_PASSWORD!,
-    })
-    //@ts-ignore
+    const session = await getSession()
+    // @ts-ignore
     cookie.id = user.id
-    await cookie.save()
+    await session.save()
     redirect('/profile')
   }
 }

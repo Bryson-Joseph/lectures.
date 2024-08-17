@@ -7,10 +7,36 @@ import {
   PASSWORD_REGEX_ERROR,
   passwordValidation,
 } from '../lib/constants'
+import db from '../lib/db'
+import bcrypt from 'bcrypt'
+import getSession from '../lib/session'
+import { redirect } from 'next/navigation'
+import { log } from 'console'
+
+const checkEmailExists = async (email: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      email,
+    },
+    select: {
+      id: true,
+    },
+  })
+  // if (user) {
+  //   return true
+  // }else{
+  //   return false
+  // }
+  return Boolean(user)
+}
 
 const formSchema = z.object({
-  email: z.string().email().toLowerCase(),
-  password: passwordValidation,
+  email: z
+    .string()
+    .email()
+    .toLowerCase()
+    .refine(checkEmailExists, 'An account with this email does not exists'),
+  password: z.string({ required_error: 'Password is required' }),
 })
 
 export async function login(prevState: any, formData: FormData) {
@@ -18,13 +44,43 @@ export async function login(prevState: any, formData: FormData) {
     email: formData.get('email'),
     password: formData.get('password'),
   }
-  const result = formSchema.safeParse(data)
+  const result = await formSchema.spa(data)
   if (!result.success) {
     return result.error.flatten()
   } else {
     console.log(result.data)
+    // find the user with the email
+    const user = await db.user.findUnique({
+      where: {
+        email: result.data.email,
+      },
+      select: {
+        id: true,
+        password: true,
+      },
+    })
+    console.log('result.data.password', result.data.password)
+    // if the user is found, check password hash
+    const ok = await bcrypt.compare(
+      result.data.password,
+      //If the user doesn't have password compare with the empty hash. So it's going to return false.
+      user!.password ?? 'xxxx'
+    )
+    // the user password(plain-text) is checked by comparing it with the harsh from the database and bcrypt will return true that is yes.
+
+    if (ok) {
+      const session = await getSession()
+      session.id = user!.id
+
+      redirect('/profile')
+    } else {
+      return {
+        findErrors: {
+          password: ['Wrong password.'],
+          email: [],
+        },
+      }
+    }
+    // redirect "/profile"
   }
-  // return {
-  //   errors: ['Wrong password', 'password too short'],
-  // }
 }
