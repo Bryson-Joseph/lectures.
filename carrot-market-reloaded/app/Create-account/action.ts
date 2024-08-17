@@ -7,13 +7,10 @@ import {
 import db from '../lib/db'
 import { z } from 'zod'
 import bcrypt from 'bcrypt'
-import { getIronSession } from 'iron-session'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import getSession from '../lib/session'
 
 const checkUsername = (username: string) => !username.includes('potato')
-
 const checkPasswords = ({
   password,
   confirm_password,
@@ -21,37 +18,6 @@ const checkPasswords = ({
   password: string
   confirm_password: string
 }) => password === confirm_password
-
-const checkUniqueUsername = async (username: string) => {
-  const user = await db.user.findUnique({
-    where: {
-      username,
-    },
-    select: {
-      id: true,
-    },
-  })
-  // if (user) {
-  //   return false;
-  // } else {
-  //   return true;
-  // }
-  return !Boolean(user)
-  // if user is not found it will return true. Also when user is found is going to return false
-}
-
-const checkUniqueEmail = async (email: string) => {
-  const user = await db.user.findUnique({
-    where: {
-      email,
-    },
-    select: {
-      id: true,
-    },
-  })
-  return Boolean(user) === false
-  // if user will be found it going to return true.But when user is not going to be found it will return false.
-}
 
 const formSchema = z
   .object({
@@ -63,28 +29,58 @@ const formSchema = z
       .toLowerCase()
       .trim()
       // .transform((username) => `🔥 ${username} 🔥`)
-      .refine(checkUsername, 'No potatoes allowed!')
-      .refine(checkUniqueUsername, 'This username is already taken'),
-    email: z
-      .string()
-      .email()
-      .toLowerCase()
-      .refine(
-        checkUniqueEmail,
-        'There is an account already registered with that email.'
-      ),
+      .refine(checkUsername, 'No potatoes allowed!'),
+
+    email: z.string().email().toLowerCase(),
+
     // Bcoz we want zod write await to checkUniqueEmail for Email written by the user we will async in const result
     password: z.string().min(PASSWORD_MIN_LENGTH),
     //.regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
     confirm_password: z.string().min(PASSWORD_MIN_LENGTH),
   })
+  .superRefine(async ({ username }, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        username,
+      },
+      select: {
+        id: true,
+      },
+    })
+    if (user) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'This username is already taken',
+        path: ['username'],
+        fatal: true,
+      })
+      return z.NEVER
+    }
+  })
+  .superRefine(async ({ email }, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+      },
+    })
+    if (user) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'This email is already taken',
+        path: ['email'],
+        fatal: true,
+      })
+      return z.NEVER
+    }
+  })
   .refine(checkPasswords, {
     message: 'Both passwords should be the same!',
     path: ['confirm_password'],
   })
-
 export async function createAccount(prevState: any, formData: FormData) {
-  console.log(cookies())
   const data = {
     username: formData.get('username'),
     email: formData.get('email'),
@@ -95,6 +91,7 @@ export async function createAccount(prevState: any, formData: FormData) {
   const result = await formSchema.safeParseAsync(data)
   // We change so that zod adds the await in all the function we created that need to have an await.
   if (!result.success) {
+    console.log(result.error?.flatten())
     return result.error.flatten()
   } else {
     // hashfunction password will change 1234 into random looking string within the same password 1234
