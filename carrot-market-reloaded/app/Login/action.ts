@@ -11,7 +11,6 @@ import db from '../lib/db'
 import bcrypt from 'bcrypt'
 import getSession from '../lib/session'
 import { redirect } from 'next/navigation'
-import { log } from 'console'
 
 const checkEmailExists = async (email: string) => {
   const user = await db.user.findUnique({
@@ -59,7 +58,6 @@ export async function login(prevState: any, formData: FormData) {
         password: true,
       },
     })
-    console.log('result.data.password', result.data.password)
     // if the user is found, check password hash
     const ok = await bcrypt.compare(
       result.data.password,
@@ -75,7 +73,7 @@ export async function login(prevState: any, formData: FormData) {
       redirect('/profile')
     } else {
       return {
-        findErrors: {
+        fieldErrors: {
           password: ['Wrong password.'],
           email: [],
         },
