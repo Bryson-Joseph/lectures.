@@ -111,8 +111,7 @@ export async function createAccount(prevState: any, formData: FormData) {
     console.log(user)
     // log the user in
     const session = await getSession()
-    // @ts-ignore
-    cookie.id = user.id
+    session.id = user.id
     await session.save()
     redirect('/profile')
   }
