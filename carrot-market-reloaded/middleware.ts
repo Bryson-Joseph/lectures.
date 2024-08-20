@@ -7,9 +7,11 @@ interface Routes {
 
 const publicOnlyUrls: Routes = {
   '/': true,
-  '/login': true,
+  '/Login': true,
   '/sms': true,
-  '/create-account': true,
+  '/Create-account': true,
+  '/github/start': true,
+  '/github/complete': true,
 }
 
 export async function middleware(request: NextRequest) {
@@ -29,5 +31,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }
