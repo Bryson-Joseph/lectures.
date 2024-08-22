@@ -1,12 +1,26 @@
+import ListProduct from '@/components/list-products'
+import db from '@/lib/db'
+
 async function getProducts() {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  const products = await db.product.findMany({
+    select: {
+      title: true,
+      created_at: true,
+      price: true,
+      photo: true,
+      id: true,
+    },
+  })
+  return products
 }
 
 export default async function Products() {
-  const Products = await getProducts()
+  const products = await getProducts()
   return (
-    <div>
-      <h1 className="text-white text-4xl">Products!</h1>
+    <div className="p-5 flex flex-col gap-5">
+      {products.map((product) => (
+        <ListProduct key={product.id} {...product} />
+      ))}
     </div>
   )
 }
