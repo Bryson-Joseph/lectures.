@@ -3,12 +3,12 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
-} from '../lib/constants'
-import db from '../lib/db'
+} from '../../../lib/constants'
+import db from '../../../lib/db'
 import { z } from 'zod'
 import bcrypt from 'bcrypt'
 import { redirect } from 'next/navigation'
-import getSession from '../lib/session'
+import getSession from '../../../lib/session'
 
 const checkUsername = (username: string) => !username.includes('potato')
 const checkPasswords = ({

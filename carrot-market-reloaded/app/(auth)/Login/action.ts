@@ -6,10 +6,10 @@ import {
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
   passwordValidation,
-} from '../lib/constants'
-import db from '../lib/db'
+} from '../../../lib/constants'
+import db from '../../../lib/db'
 import bcrypt from 'bcrypt'
-import getSession from '../lib/session'
+import getSession from '../../../lib/session'
 import { redirect } from 'next/navigation'
 
 const checkEmailExists = async (email: string) => {

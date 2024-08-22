@@ -1,11 +1,11 @@
 'use client'
 
-import FormButton from '../components/button'
-import FormInput from '../components/input'
-import SocialLogin from '../components/social-login'
+import FormButton from '../../../components/button'
+import FormInput from '../../../components/input'
+import SocialLogin from '../../../components/social-login'
 import { useFormState } from 'react-dom'
-import { login } from '../Login/action'
-import { PASSWORD_MIN_LENGTH } from '../lib/constants'
+import { login } from './action'
+import { PASSWORD_MIN_LENGTH } from '../../../lib/constants'
 
 export default function LogIn() {
   const [state, dispatch] = useFormState(login, null)
