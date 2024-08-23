@@ -1,5 +1,6 @@
 import ListProduct from '@/components/list-products'
 import db from '@/lib/db'
+import React from 'react'
 
 async function getProducts() {
   const products = await db.product.findMany({
