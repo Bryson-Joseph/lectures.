@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { NextRequest } from 'next/server'
 import getSession from '@/lib/session'
 import db from '@/lib/db'
@@ -6,7 +6,9 @@ import db from '@/lib/db'
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code')
   if (!code) {
-    return notFound()
+    return new Response(null, {
+      status: 400,
+    })
   }
   const accessTokenParams = new URLSearchParams({
     client_id: process.env.GITHUB_CLIENT_ID!,
@@ -52,6 +54,9 @@ export async function GET(request: NextRequest) {
       username: login,
       github_id: id + '',
       avatar: avatar_url,
+    },
+    select: {
+      id: true,
     },
   })
   const session = await getSession()
