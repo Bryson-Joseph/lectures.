@@ -9,18 +9,32 @@ import { useFormState } from 'react-dom'
 
 export default function AddProduct() {
   const [preview, setPreview] = useState('')
+  const [error, setError] = useState('')
+
   const OnImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setError('') // Reset error state
     const {
       target: { files },
     } = event
-    if (!files) {
+    if (!files || files.length === 0) {
       return
     }
+
     const file = files[0]
+
+    // Check file size (3 MB limit)
+    const maxSizeInBytes = 3 * 1024 * 1024
+    if (file.size > maxSizeInBytes) {
+      setError('File size exceeds 3 MB')
+      return
+    }
+
     const url = URL.createObjectURL(file)
     setPreview(url)
   }
+
   const [state, action] = useFormState(uploadProduct, null)
+
   return (
     <div>
       <form action={action} className="p-5 flex flex-col gap-5">
@@ -48,6 +62,7 @@ export default function AddProduct() {
           accept="image/*"
           className="hidden"
         />
+        {error && <div className="text-red-500 text-sm">{error}</div>}
         <Input
           type="text"
           name="title"
