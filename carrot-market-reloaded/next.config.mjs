@@ -11,6 +11,9 @@ const nextConfig = {
       {
         hostname: 'www.spectator.co.uk',
       },
+      {
+        hostname: 'img1.wsimg.com',
+      },
     ],
   },
 }
