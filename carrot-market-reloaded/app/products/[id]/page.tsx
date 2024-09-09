@@ -46,21 +46,27 @@ export default async function ProductDetail({
   }
   const isOwner = await getIsOwner(product.userId)
   return (
-    <div>
+    <div className="pb-40">
       <div className="relative aspect-square">
         <Image
           className="object-cover"
           fill
-          src={product.photo}
+          src={product.photo} // Assuming product.photo already contains the correct path
           alt={product.title}
         />
       </div>
       <div className="p-5 flex items-center gap-3 border-b border-neutral-700">
-        <div className="size-10 overflow-hidden rounded-full">
-          {product.user.avatar !== null ? (
-            <Image src={product.user.avatar} alt={product.user.username} />
+        <div className="w-10 h-10 overflow-hidden rounded-full">
+          {product.user.avatar ? (
+            <Image
+              src={product.user.avatar}
+              alt={product.user.username}
+              width={40} // Add appropriate dimensions
+              height={40} // Add appropriate dimensions
+              className="object-cover"
+            />
           ) : (
-            <UserIcon />
+            <UserIcon className="w-10 h-10 text-gray-500" />
           )}
         </div>
         <div>
@@ -71,7 +77,7 @@ export default async function ProductDetail({
         <h1 className="text-2xl font-semibold">{product.title}</h1>
         <p>{product.description}</p>
       </div>
-      <div className="fixed w-full bottom-0 left-0 p-5 pb-10 bg-neutral-800 flex justify-between items-center">
+      <div className="fixed w-full bottom-0 p-5 pb-10 bg-neutral-800 flex justify-between items-center max-w-screen-sm">
         <span className="font-semibold text-xl">
           {formatToWon(product.price)}one
         </span>
@@ -82,7 +88,9 @@ export default async function ProductDetail({
         ) : null}
         <Link
           className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold"
-          href={``}>
+          href={`/chat/${product.user.username}`}>
+          {' '}
+          {/* Assuming this is a placeholder route */}
           Chat now
         </Link>
       </div>

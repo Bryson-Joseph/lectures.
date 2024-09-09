@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
     }
   } else {
     if (exists) {
-      return NextResponse.redirect(new URL('/products', request.url))
+      return NextResponse.redirect(new URL('/home', request.url))
       // This check if the user try to go back among the publicOnlyUrls this return will take the user to the products screen
     }
   }
