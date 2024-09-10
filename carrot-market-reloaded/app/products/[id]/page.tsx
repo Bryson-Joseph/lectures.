@@ -4,17 +4,15 @@ import { UserIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import {
-  unstable_cache as nextCache,
-  revalidateTag,
-  revalidatePath,
-} from 'next/cache'
+import { unstable_cache as nextCache, revalidateTag } from 'next/cache'
+import { useRouter } from 'next/navigation'
+import getSession from '@/lib/session'
 
 async function getIsOwner(userId: number) {
-  // const session = await getSession()
-  // if (session.id) {
-  //   return session.id === userId
-  // }
+  const session = await getSession()
+  if (session.id) {
+    return session.id === userId
+  }
   return false
 }
 
@@ -78,7 +76,7 @@ export default async function ProductDetail({
   const isOwner = await getIsOwner(product.userId)
   const revalidate = async () => {
     'use server'
-    revalidateTag('xxxx')
+    revalidateTag('product-detail')
   }
   return (
     <div className="pb-40">
@@ -111,21 +109,28 @@ export default async function ProductDetail({
         <h1 className="text-2xl font-semibold">{product.title}</h1>
         <p>{product.description}</p>
       </div>
-      <div className="fixed w-full bottom-0  p-5 pb-10 bg-neutral-800 flex justify-between items-center max-w-screen-sm">
+      <div className="fixed w-full bottom-0 p-5 pb-10 bg-neutral-800 flex justify-between items-center max-w-screen-sm">
         <span className="font-semibold text-xl">
-          {formatToWon(product.price)}won
+          {formatToWon(product.price)} won
         </span>
-        {isOwner ? (
-          <form action={revalidate}>
-            <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold">
-              Revalidate title cache
-            </button>
-          </form>
-        ) : null}
+        {isOwner && (
+          <>
+            <form action={revalidate}>
+              <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold">
+                Revalidate title cache
+              </button>
+            </form>
+            <Link
+              href={`/edit-product/${id}`}
+              className="bg-neutral-500 px-5 py-2.5 rounded-md text-white font-semibold">
+              Edit Product
+            </Link>
+          </>
+        )}
         <Link
           className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold"
           href={``}>
-          chat now
+          Chat Now
         </Link>
       </div>
     </div>
