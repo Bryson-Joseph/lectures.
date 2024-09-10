@@ -37,18 +37,19 @@ export default function EditProduct({ params }: { params: { id: string } }) {
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Product Title"
+        placeholder="Title"
       />
       <textarea
+        className="-my-4 h-11"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Product Description"
+        placeholder="Description"
       />
       <input
         type="number"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
-        placeholder="Product Price"
+        placeholder="Price"
       />
       <button
         className="bg-green-500 py-2.5 rounded-md text-white font-semibold mx-1"
