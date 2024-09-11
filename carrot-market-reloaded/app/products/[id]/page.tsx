@@ -3,7 +3,7 @@ import { formatToWon } from '@/lib/utils'
 import { UserIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { unstable_cache as nextCache, revalidateTag } from 'next/cache'
 import getSession from '@/lib/session'
 
@@ -81,6 +81,29 @@ export default async function ProductDetail({
     revalidateTag('product-title')
   }
 
+  const createChatRoom = async () => {
+    'use server'
+    const session = await getSession()
+    const room = await db.chatroom.create({
+      data: {
+        users: {
+          connect: [
+            {
+              id: product.userId,
+            },
+            {
+              id: session.id,
+            },
+          ],
+        },
+      },
+      select: {
+        id: true,
+      },
+    })
+    redirect(`/chats/${room.id}`)
+  }
+
   return (
     <div className="pb-40">
       <div className="relative aspect-square">
@@ -130,11 +153,11 @@ export default async function ProductDetail({
             </Link>
           </>
         )}
-        <Link
-          className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold"
-          href={``}>
-          Chat Now
-        </Link>
+        <form action={createChatRoom}>
+          <button className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold">
+            chat now
+          </button>
+        </form>
       </div>
     </div>
   )
