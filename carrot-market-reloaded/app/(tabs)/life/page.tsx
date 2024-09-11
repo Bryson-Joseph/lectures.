@@ -1,10 +1,10 @@
-import Link from 'next/link'
 import db from '@/lib/db'
 import { formatToTimeAgo } from '@/lib/utils'
 import {
   ChatBubbleBottomCenterIcon,
   HandThumbUpIcon,
 } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 
 async function getPosts() {
   const posts = await db.post.findMany({
