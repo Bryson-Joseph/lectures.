@@ -14,6 +14,9 @@ const nextConfig = {
       {
         hostname: 'img1.wsimg.com',
       },
+      {
+        hostname: 'www.modernfarmhouseeats.com',
+      },
     ],
   },
 }

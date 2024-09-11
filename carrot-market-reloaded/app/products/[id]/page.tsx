@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { unstable_cache as nextCache, revalidateTag } from 'next/cache'
-import { useRouter } from 'next/navigation'
 import getSession from '@/lib/session'
 
 async function getIsOwner(userId: number) {
@@ -74,10 +73,14 @@ export default async function ProductDetail({
     return notFound()
   }
   const isOwner = await getIsOwner(product.userId)
+
   const revalidate = async () => {
     'use server'
+    console.log('Revalidation triggered')
     revalidateTag('product-detail')
+    revalidateTag('product-title')
   }
+
   return (
     <div className="pb-40">
       <div className="relative aspect-square">
@@ -116,7 +119,7 @@ export default async function ProductDetail({
         {isOwner && (
           <>
             <form action={revalidate}>
-              <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold">
+              <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold text-sm">
                 Revalidate title cache
               </button>
             </form>
