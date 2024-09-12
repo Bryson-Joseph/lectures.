@@ -1,61 +1,50 @@
-'use client'
-
+import { revalidatePath } from 'next/cache'
 import db from '@/lib/db'
-import { revalidateTag } from 'next/cache'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { redirect } from 'next/navigation'
 
 export default function EditProduct({ params }: { params: { id: string } }) {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState('')
-  const router = useRouter()
+  const id = Number(params.id)
 
-  const handleSave = async () => {
+  async function updateProduct(data: FormData) {
+    'use server'
     await db.product.update({
-      where: {
-        id: Number(params.id),
-      },
+      where: { id },
       data: {
-        title,
-        description,
-        price: Number(price),
+        title: data.get('title') as string,
+        description: data.get('description') as string,
+        price: Number(data.get('price')),
       },
     })
 
-    // Revalidate the product detail page
-    revalidateTag('product-detail')
-
-    // Redirect to the product detail page
-    router.push(`/product/${params.id}`)
+    revalidatePath(`/products/${id}`)
+    redirect(`/products/${id}`)
   }
 
   return (
-    <div>
-      <h1 className="text-5xl mb-6">Edit Product</h1>
+    <form action={updateProduct}>
+      <h1 className="text-5xl font-semibold mb-4">Edit-Product</h1>
       <input
+        className="text-black"
         type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        name="title"
         placeholder="Title"
       />
-      <textarea
-        className="-my-4 h-11"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+      <input
+        className="text-black"
+        type="text"
+        name="description"
         placeholder="Description"
       />
       <input
+        className="text-black"
         type="number"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        name="price"
         placeholder="Price"
       />
-      <button
-        className="bg-green-500 py-2.5 rounded-md text-white font-semibold mx-1"
-        onClick={handleSave}>
+      <button className="bg-green-500 py-2" type="submit">
         Save Changes
       </button>
-    </div>
+    </form>
   )
 }

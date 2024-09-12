@@ -2,10 +2,10 @@ import db from '@/lib/db'
 import { formatToWon } from '@/lib/utils'
 import { UserIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
-import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { unstable_cache as nextCache, revalidateTag } from 'next/cache'
 import getSession from '@/lib/session'
+import Link from 'next/link'
 
 async function getIsOwner(userId: number) {
   const session = await getSession()
@@ -17,9 +17,7 @@ async function getIsOwner(userId: number) {
 
 async function getProduct(id: number) {
   const product = await db.product.findUnique({
-    where: {
-      id,
-    },
+    where: { id },
     include: {
       user: {
         select: {
@@ -38,12 +36,8 @@ const getCachedProduct = nextCache(getProduct, ['product-detail'], {
 
 async function getProductTitle(id: number) {
   const product = await db.product.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      title: true,
-    },
+    where: { id },
+    select: { title: true },
   })
   return product
 }
@@ -54,9 +48,7 @@ const getCachedProductTitle = nextCache(getProductTitle, ['product-title'], {
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const product = await getCachedProductTitle(Number(params.id))
-  return {
-    title: product?.title,
-  }
+  return { title: product?.title }
 }
 
 export default async function ProductDetail({
@@ -68,15 +60,16 @@ export default async function ProductDetail({
   if (isNaN(id)) {
     return notFound()
   }
+
   const product = await getCachedProduct(id)
   if (!product) {
     return notFound()
   }
+
   const isOwner = await getIsOwner(product.userId)
 
   const revalidate = async () => {
     'use server'
-    console.log('Revalidation triggered')
     revalidateTag('product-detail')
     revalidateTag('product-title')
   }
@@ -87,19 +80,10 @@ export default async function ProductDetail({
     const room = await db.chatroom.create({
       data: {
         users: {
-          connect: [
-            {
-              id: product.userId,
-            },
-            {
-              id: session.id,
-            },
-          ],
+          connect: [{ id: product.userId }, { id: session.id }],
         },
       },
-      select: {
-        id: true,
-      },
+      select: { id: true },
     })
     redirect(`/chats/${room.id}`)
   }
@@ -110,13 +94,13 @@ export default async function ProductDetail({
         <Image
           className="object-cover"
           fill
-          src={`${product.photo}`}
+          src={product.photo}
           alt={product.title}
         />
       </div>
       <div className="p-5 flex items-center gap-3 border-b border-neutral-700">
         <div className="size-10 overflow-hidden rounded-full">
-          {product.user.avatar !== null ? (
+          {product.user.avatar ? (
             <Image
               src={product.user.avatar}
               width={40}
@@ -137,13 +121,13 @@ export default async function ProductDetail({
       </div>
       <div className="fixed w-full bottom-0 p-5 pb-10 bg-neutral-800 flex justify-between items-center max-w-screen-sm">
         <span className="font-semibold text-xl">
-          {formatToWon(product.price)} won
+          {formatToWon(product.price)}won
         </span>
         {isOwner && (
           <>
             <form action={revalidate}>
-              <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold text-sm">
-                Revalidate title cache
+              <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold">
+                Revalidate Cache
               </button>
             </form>
             <Link
@@ -155,7 +139,7 @@ export default async function ProductDetail({
         )}
         <form action={createChatRoom}>
           <button className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold">
-            chat now
+            Chat Now
           </button>
         </form>
       </div>
@@ -165,9 +149,7 @@ export default async function ProductDetail({
 
 export async function generateStaticParams() {
   const products = await db.product.findMany({
-    select: {
-      id: true,
-    },
+    select: { id: true },
   })
-  return products.map((product) => ({ id: product.id + '' }))
+  return products.map((product) => ({ id: product.id.toString() }))
 }
