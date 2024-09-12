@@ -1,10 +1,11 @@
 'use client'
 
 import { InitialChatMessages } from '@/app/chats/[id]/page'
+import { saveMessage } from '@/app/chats/action'
 import { formatToTimeAgo } from '@/lib/utils'
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid'
+import { RealtimeChannel, createClient } from '@supabase/supabase-js'
 import Image from 'next/image'
-import { createClient, RealtimeChannel } from '@supabase/supabase-js'
 import { useEffect, useRef, useState } from 'react'
 
 const SUPABASE_PUBLIC_KEY =
@@ -15,11 +16,15 @@ interface ChatMessageListProps {
   initialMessages: InitialChatMessages
   userId: number
   chatRoomId: string
+  username: string
+  avatar: string
 }
 export default function ChatMessagesList({
   initialMessages,
   userId,
   chatRoomId,
+  username,
+  avatar,
 }: ChatMessageListProps) {
   const [messages, setMessages] = useState(initialMessages)
   const [message, setMessage] = useState('')
@@ -30,7 +35,7 @@ export default function ChatMessagesList({
     } = event
     setMessage(value)
   }
-  const onSubmit = (event: React.FormEvent) => {
+  const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     setMessages((prevMsgs) => [
       ...prevMsgs,
@@ -48,8 +53,18 @@ export default function ChatMessagesList({
     channel.current?.send({
       type: 'broadcast',
       event: 'message',
-      payload: { message },
+      payload: {
+        id: Date.now(),
+        payload: message,
+        created_at: new Date(),
+        userId,
+        user: {
+          username,
+          avatar,
+        },
+      },
     })
+    await saveMessage(message, chatRoomId)
     setMessage('')
   }
   useEffect(() => {
@@ -57,7 +72,7 @@ export default function ChatMessagesList({
     channel.current = client.channel(`room-${chatRoomId}`)
     channel.current
       .on('broadcast', { event: 'message' }, (payload) => {
-        console.log(payload)
+        setMessages((prevMsgs) => [...prevMsgs, payload.payload])
       })
       .subscribe()
     return () => {
