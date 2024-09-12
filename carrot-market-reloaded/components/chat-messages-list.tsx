@@ -4,8 +4,8 @@ import { InitialChatMessages } from '@/app/chats/[id]/page'
 import { formatToTimeAgo } from '@/lib/utils'
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid'
 import Image from 'next/image'
-import { createClient } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react'
+import { createClient, RealtimeChannel } from '@supabase/supabase-js'
+import { useEffect, useRef, useState } from 'react'
 
 const SUPABASE_PUBLIC_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpdWR5amN6bm9vanh6cnFtaGJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYxMjE3NTEsImV4cCI6MjA0MTY5Nzc1MX0.Wt47Cso8FcKLvz4nSE34xA0dQ4_gYY0IuhT5gdB-1So'
@@ -23,6 +23,7 @@ export default function ChatMessagesList({
 }: ChatMessageListProps) {
   const [messages, setMessages] = useState(initialMessages)
   const [message, setMessage] = useState('')
+  const channel = useRef<RealtimeChannel>()
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -31,7 +32,6 @@ export default function ChatMessagesList({
   }
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    alert(message)
     setMessages((prevMsgs) => [
       ...prevMsgs,
       {
@@ -45,14 +45,24 @@ export default function ChatMessagesList({
         },
       },
     ])
+    channel.current?.send({
+      type: 'broadcast',
+      event: 'message',
+      payload: { message },
+    })
     setMessage('')
   }
   useEffect(() => {
     const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY)
-    const channel = client.channel(`room-${chatRoomId}`)
-    channel.on('broadcast', { event: 'message' }, (payload) => {
-      console.log(payload)
-    })
+    channel.current = client.channel(`room-${chatRoomId}`)
+    channel.current
+      .on('broadcast', { event: 'message' }, (payload) => {
+        console.log(payload)
+      })
+      .subscribe()
+    return () => {
+      channel.current?.unsubscribe()
+    }
   }, [chatRoomId])
   return (
     <div className="p-5 flex flex-col gap-5 min-h-screen justify-end">
