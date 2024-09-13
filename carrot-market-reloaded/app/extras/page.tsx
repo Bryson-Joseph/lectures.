@@ -1,21 +1,25 @@
-'use client'
+import { revalidatePath } from 'next/cache'
 
-import Button from '@/components/button'
-import Input from '@/components/input'
-import { useFormState } from 'react-dom'
-import { startStream } from '../streams/add/action'
-
-export default function AddStream() {
-  const [state, action] = useFormState(startStream, null)
-  return (
-    <form className="p-5 flex flex-col gap-2" action={action}>
-      <Input
-        name="title"
-        required
-        placeholder="Title or your stream."
-        errors={state?.formErrors}
-      />
-      <Button text="Start streaming" />
-    </form>
+async function getData() {
+  const data = await fetch(
+    'https://nomad-movies.nomadcoders.workers.dev/movies'
   )
 }
+
+export default async function Extras() {
+  await getData()
+  const action = async () => {
+    'use server'
+    revalidatePath('/extras')
+  }
+  return (
+    <div className="flex flex-col gap-3 py-10">
+      <h1 className="text-6xl font-metallica">Extras!</h1>
+      <h2 className="font-roboto">So much more to learn!</h2>
+      <form action={action}>
+        <button>revalidate</button>
+      </form>
+    </div>
+  )
+}
+// This page couldn't be found... This is because the folder is named _extras so is private..
