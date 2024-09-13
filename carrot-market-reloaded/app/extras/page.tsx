@@ -3,7 +3,7 @@
 import Button from '@/components/button'
 import Input from '@/components/input'
 import { useFormState } from 'react-dom'
-import { startStream } from './action'
+import { startStream } from '../streams/add/action'
 
 export default function AddStream() {
   const [state, action] = useFormState(startStream, null)
