@@ -1,5 +1,4 @@
 'use client'
-
 import { dislikePost, likePost } from '@/app/posts/[id]/action'
 import { HandThumbUpIcon } from '@heroicons/react/24/outline'
 import { HandThumbUpIcon as OutlineHandThumbUpIcon } from '@heroicons/react/24/outline'

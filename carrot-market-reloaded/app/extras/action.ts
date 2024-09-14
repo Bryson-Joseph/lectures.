@@ -2,6 +2,6 @@
 
 import 'server-only'
 
-export function fetchFromAPI() {
+export async function fetchFromAPI() {
   fetch('.....')
 }
