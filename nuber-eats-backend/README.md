@@ -86,11 +86,11 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 ## The Backend of Nuber Eats Clone
 
-#User Model:
+##User Model:
 
-- id
-  -createdAt
-  -updatedAt
+-id
+-createdAt
+-updatedAt
 
 -email
 -password

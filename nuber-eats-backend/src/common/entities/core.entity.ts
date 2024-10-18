@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { InputType,ObjectType } from '@nestjs/graphql';
 
 export class CoreEntity {
   @PrimaryGeneratedColumn()
