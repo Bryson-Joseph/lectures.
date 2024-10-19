@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
-import { CreateAccountInput } from './dtos/create-account.dto';
-import { LoginInput } from './dtos/login.dtos';
 import * as jwt from 'jsonwebtoken';
+import { CreateAccountInput } from './dtos/create-account.dto';
+import { User } from './entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from 'src/jwt/jwt.service';
+import { LoginInput } from './dtos/login.dtos';
 
 @Injectable()
 export class UserService {
@@ -20,12 +21,12 @@ export class UserService {
     role,
   }: CreateAccountInput): Promise<{ ok: boolean; error?: string }> {
     try {
-      // Use 'where' to specify the condition in findOne
       const exists = await this.users.findOne({ where: { email } });
       if (exists) {
         return { ok: false, error: 'There is a user with that email already' };
       }
       await this.users.save(this.users.create({ email, password, role }));
+      return { ok: true };
     } catch (e) {
       return { ok: false, error: "Couldn't create account" };
     }
@@ -35,7 +36,7 @@ export class UserService {
     email,
     password,
   }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
-    // make a JWT and it to the user
+    // make a JWT and give it to the user
     try {
       const user = await this.users.findOne({ where: { email } });
       if (!user) {
@@ -62,5 +63,9 @@ export class UserService {
         error,
       };
     }
+  }
+
+  async findById(id: number): Promise<User> {
+    return this.users.findOne({ where: { id } });
   }
 }
