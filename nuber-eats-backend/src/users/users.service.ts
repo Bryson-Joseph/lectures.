@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as jwt from 'jsonwebtoken';
 import { CreateAccountInput } from './dtos/create-account.dto';
+import { LoginInput } from './dtos/login.dtos';
 import { User } from './entities/user.entity';
 import { JwtService } from 'src/jwt/jwt.service';
-import { LoginInput } from './dtos/login.dtos';
 import { EditProfileInput } from './dtos/edit-profile.dto';
 
 @Injectable()
@@ -73,13 +72,19 @@ export class UserService {
     userId: number,
     { email, password }: EditProfileInput,
   ): Promise<User> {
-    const user = await this.users.findOne({ where: { userId } });
-    if (email) {
-      user.email = email;
+    const user = await this.users.findOne({ where: { id: userId } });
+    {
+      // Use where: { id: userId } }
+      if (!user) {
+        throw new Error('User not found');
+      }
+      if (email) {
+        user.email = email;
+      }
+      if (password) {
+        user.password = password;
+      }
+      return this.users.save(user);
     }
-    if (password) {
-      user.password = password;
-    }
-    return this.users.save(user);
   }
 }
