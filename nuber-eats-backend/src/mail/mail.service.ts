@@ -6,7 +6,7 @@ import * as FormData from 'form-data';
 @Injectable()
 export class MailService {
   constructor(
-    @Inject(CONFIG_OPTIONS) private readonly opftions: MailModuleOptions,
+    @Inject(CONFIG_OPTIONS) private readonly options: MailModuleOptions,
   ) {
     this.sendEmail('testing', 'test');
   }
