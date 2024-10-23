@@ -38,6 +38,7 @@
     "graphql-tools": "^9.0.2",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
+    "mailgun.js": "^10.2.3",
     "mysql2": "^3.11.3",
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.0",
