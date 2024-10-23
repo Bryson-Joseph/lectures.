@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Entity, Repository } from 'typeorm';
 import { CreateAccountInput } from './dtos/create-account.dto';
 import { LoginInput } from './dtos/login.dtos';
 import { User } from './entities/user.entity';
 import { JwtService } from 'src/jwt/jwt.service';
 import { EditProfileInput } from './dtos/edit-profile.dto';
-import { Verification } from 'src/verification.entity';
+import { Verification } from 'src/users/entities/verification.entity';
 
 @Injectable()
 export class UserService {
@@ -47,7 +47,10 @@ export class UserService {
   }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
     // make a JWT and give it to the user
     try {
-      const user = await this.users.findOne({ where: { email } });
+      const user = await this.users.findOne({
+        where: { email },
+        select: ['password'],
+      });
       if (!user) {
         return {
           ok: false,
@@ -83,18 +86,33 @@ export class UserService {
     { email, password }: EditProfileInput,
   ): Promise<User> {
     const user = await this.users.findOne({ where: { id: userId } });
-    {
-      // Use where: { id: userId } }
-      if (!user) {
-        throw new Error('User not found');
+    if (email) {
+      user.email = email;
+      user.verification = false;
+      await this.verifications.save(this.verifications.create({ user }));
+    }
+    if (password) {
+      user.password = password;
+    }
+    return this.users.save(user);
+  }
+
+  async verifyEmail(code: string): Promise<boolean> {
+    try {
+      const verification = await this.verifications.findOne({
+        where: { code },
+        relations: ['user'],
+      });
+      if (verification) {
+        verification.user.verification = true;
+        console.log(verification.user);
+        this.users.save(verification.user);
+        return true;
       }
-      if (email) {
-        user.email = email;
-      }
-      if (password) {
-        user.password = password;
-      }
-      return this.users.save(user);
+      throw new Error();
+    } catch (e) {
+      console.log(e);
+      return false;
     }
   }
 }
