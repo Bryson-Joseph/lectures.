@@ -1,0 +1,43 @@
+.status-bar {
+    position: fixed;
+    top: 0;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding: 5px 3px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+
+/* CSS hack that aligns items to center and space-between  */
+
+.status-bar__column {
+    width: 33%;
+}
+
+.status-bar__column:first-child span {
+    margin-right: 5px;
+}
+
+.status-bar__column:nth-child(2) {
+    display: flex;
+    justify-content: center;
+}
+
+.status-bar__column:last-child {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+/* Adjusting icons' location  */
+
+.status-bar__column .fa-unlock-alt {
+    margin: 0px 12px;
+}
+
+.status-bar__column .fa-battery-full {
+    margin: 0px 5px;
+}

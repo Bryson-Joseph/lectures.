@@ -1,0 +1,43 @@
+.icon-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.icon-row__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon-row__icon i {
+    font-size: 30px;
+}
+
+.icon-row__icon span {
+    margin-top: 25px;
+}
+
+.icon-row__icon-last {
+    margin-left: -60px;
+}
+
+
+/* .icon-row-second {
+    display: flex;
+    margin-top: 25px;
+    justify-content: space-between;
+  }
+  .icon-row-second__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 60px;
+  }
+  .icon-row-second__icon i {
+    font-size: 30px;
+  }
+  
+  .icon-row-second__icon span {
+    margin-top: 25px;
+  } */

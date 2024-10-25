@@ -1,0 +1,61 @@
+.more-screen .icon-row {
+    margin-top: 35px;
+    margin-bottom: 50px;
+}
+
+.more-screen .icon-row-second {
+    margin-top: 45px;
+}
+
+.more-suggestions {
+    margin-top: 40px;
+    border-top: var(--main-border);
+    padding-top: 25px;
+}
+
+.more-suggestions__title {
+    margin-bottom: 25px;
+}
+
+.more-suggestions__icons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.more-suggestions__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.more-suggestions__icon-image {
+    width: 55px;
+    height: 55px;
+    background-color: var(--yellow);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.more-suggestions__icon-image i {
+    font-size: 30px;
+    color: white;
+}
+
+.blank {
+    background-color: white;
+    color: white;
+}
+
+.icon-row__icon>.more__red_dot {
+    color: tomato;
+    display: flex;
+    position: absolute;
+    font-size: 120px;
+    margin-left: 45px;
+    margin-top: -45px;
+    font-size: 55px;
+    animation: appearRedDotAnimation 3s ease-in-out infinite;
+}
