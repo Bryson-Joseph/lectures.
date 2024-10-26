@@ -84,7 +84,6 @@ describe('UserService', () => {
         error: 'There is a user with that email already',
       });
     });
-
     it('should create a new user', async () => {
       usersRepository.findOne.mockResolvedValue(undefined);
       usersRepository.create.mockReturnValue(createAccountArgs);
@@ -108,12 +107,10 @@ describe('UserService', () => {
       expect(verificationsRepository.create).toHaveBeenCalledWith({
         user: createAccountArgs,
       });
-
       expect(verificationsRepository.save).toHaveBeenCalledTimes(1);
       expect(verificationsRepository.save).toHaveBeenCalledWith({
         user: createAccountArgs,
       });
-
       expect(mailService.sendVerificationEmail).toHaveBeenCalledTimes(1);
       expect(mailService.sendVerificationEmail).toHaveBeenCalledWith(
         expect.any(String),
