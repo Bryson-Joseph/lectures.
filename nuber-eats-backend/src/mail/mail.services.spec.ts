@@ -29,6 +29,26 @@ describe('MailService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+  describe('sendVerificationEmail', () => {
+    it('should call sendEmail', () => {
+      const sendVerificationEmailArgs = {
+        email: 'email',
+        code: 'code',
+      };
+      service.sendVerificationEmail(
+        sendVerificationEmailArgs.email,
+        sendVerificationEmailArgs.code,
+      );
+      expect(service.sendEmail).toHaveBeenCalledTimes(1);
+      expect(service.sendEmail).toHaveBeenCalledWith(
+        'Verify Your Email',
+        'verify-email',
+        [
+          { key: 'code', value: sendVerificationEmailArgs.email },
+          { key: 'username', value: sendVerificationEmailArgs.code },
+        ],
+      );
+    });
+  });
   it.todo('sendEmail');
-  it.todo('sendVerificationEmail');
 });

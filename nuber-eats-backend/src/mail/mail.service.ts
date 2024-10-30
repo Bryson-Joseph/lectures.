@@ -8,11 +8,7 @@ export class MailService {
   constructor(
     @Inject(CONFIG_OPTIONS) private readonly options: MailModuleOptions,
   ) {}
-  private async sendEmail(
-    subject: string,
-    template: string,
-    EmailVars: EmailVar[],
-  ) {
+  async sendEmail(subject: string, template: string, EmailVars: EmailVar[]) {
     const form = new FormData();
     form.append(
       'from',
