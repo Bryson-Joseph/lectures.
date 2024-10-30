@@ -3,13 +3,16 @@ import * as jwt from 'jsonwebtoken';
 import { CONFIG_OPTIONS } from 'src/common/common.constants';
 import { JwtService } from './jwt.service';
 
+const TEST_KEY = 'testKey';
+const USER_ID = 1;
+
 jest.mock('jsonwebtoken', () => {
   return {
     sign: jest.fn(() => 'TOKEN'),
+    verify: jest.fn(() => ({ id: USER_ID })),
   };
 });
 
-const TEST_KEY = 'testKey';
 describe('JwtService', () => {
   let service: JwtService;
   beforeEach(async () => {
