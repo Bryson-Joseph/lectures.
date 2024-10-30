@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import * as jwt from 'jsonwebtoken';
 import { CONFIG_OPTIONS } from 'src/common/common.constants';
 import { JwtService } from './jwt.service';
+import { execPath } from 'process';
 
 const TEST_KEY = 'testKey';
 const USER_ID = 1;
@@ -40,6 +41,11 @@ describe('JwtService', () => {
     });
   });
   describe('verify', () => {
-    it('should return the decoded token', () => {});
+    it('should return the decoded token', () => {
+      const TOKEN = 'TOKEN';
+      const decodedToken = service.verify(TOKEN);
+      expect(jwt.verify).toHaveBeenCalledTimes(1);
+      expect(jwt.verify).toHaveBeenCalledWith(TOKEN, TEST_KEY);
+    });
   });
 });
