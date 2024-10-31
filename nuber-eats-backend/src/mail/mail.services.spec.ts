@@ -37,7 +37,7 @@ describe('MailService', () => {
         email: 'email',
         code: 'code',
       };
-      // jest.spyOn(service, 'sendEmail').mockImplementation(async () => true);
+      jest.spyOn(service, 'sendEmail').mockImplementation(async () => true);
       service.sendVerificationEmail(
         sendVerificationEmailArgs.email,
         sendVerificationEmailArgs.code,
