@@ -11,6 +11,8 @@ jest.mock('got', () => {
   };
 });
 
+const GRAPHQL_ENDPOINT = '/graphql';
+
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
