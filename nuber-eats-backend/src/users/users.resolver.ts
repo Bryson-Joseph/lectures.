@@ -1,17 +1,17 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { User } from './entities/user.entity';
-import { UserService } from './users.service';
+import { UseGuards } from '@nestjs/common';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { AuthUser } from 'src/auth/auth-user.decorator';
+import { AuthGuard } from 'src/auth/auth.guard';
 import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/create-account.dto';
-import { LoginOutput, LoginInput } from './dtos/login.dtos';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { AuthUser } from 'src/auth/auth-user.decorator';
-import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
+import { LoginInput, LoginOutput } from './dtos/login.dtos';
+import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';
+import { User } from './entities/user.entity';
+import { UserService } from './users.service';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -19,10 +19,11 @@ export class UserResolver {
 
   @Mutation((returns) => CreateAccountOutput)
   async createAccount(
-    @Args('input') CreateAccountInput: CreateAccountInput,
+    @Args('input') createAccountInput: CreateAccountInput,
   ): Promise<CreateAccountOutput> {
-    return this.usersService.createAccount(CreateAccountInput);
+    return this.usersService.createAccount(createAccountInput);
   }
+
   @Mutation((returns) => LoginOutput)
   async login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
     return this.usersService.login(loginInput);
@@ -50,6 +51,7 @@ export class UserResolver {
   ): Promise<EditProfileOutput> {
     return this.usersService.editProfile(authUser.id, editProfileInput);
   }
+
   @Mutation((returns) => VerifyEmailOutput)
   verifyEmail(
     @Args('input') { code }: VerifyEmailInput,

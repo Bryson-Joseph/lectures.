@@ -20,7 +20,7 @@ describe('MailService', () => {
           provide: CONFIG_OPTIONS,
           useValue: {
             apiKey: 'test-apiKey',
-            domain: 'TEST_DOMAIN',
+            domain: TEST_DOMAIN,
             fromEmail: 'test-fromEmail',
           },
         },
@@ -28,9 +28,11 @@ describe('MailService', () => {
     }).compile();
     service = module.get<MailService>(MailService);
   });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
   describe('sendVerificationEmail', () => {
     it('should call sendEmail', () => {
       const sendVerificationEmailArgs = {
@@ -47,8 +49,8 @@ describe('MailService', () => {
         'Verify Your Email',
         'verify-email',
         [
-          { key: 'code', value: sendVerificationEmailArgs.email },
-          { key: 'username', value: sendVerificationEmailArgs.code },
+          { key: 'code', value: sendVerificationEmailArgs.code },
+          { key: 'username', value: sendVerificationEmailArgs.email },
         ],
       );
     });

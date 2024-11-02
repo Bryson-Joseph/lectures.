@@ -77,7 +77,7 @@ export class UserService {
     } catch (error) {
       return {
         ok: false,
-        error: "Can't log user in",
+        error: "Can't log user in.",
       };
     }
   }
@@ -102,7 +102,7 @@ export class UserService {
       const user = await this.users.findOne({ where: { id: userId } });
       if (email) {
         user.email = email;
-        user.verification = false;
+        user.verified = false;
         await this.verifications.delete({ user: { id: user.id } });
         const verification = await this.verifications.save(
           this.verifications.create({ user }),
@@ -117,7 +117,6 @@ export class UserService {
         ok: true,
       };
     } catch (error) {
-      console.log(error);
       return { ok: false, error: 'Could not update profile.' };
     }
   }
@@ -129,14 +128,14 @@ export class UserService {
         relations: ['user'],
       });
       if (verification) {
-        verification.user.verification = true;
+        verification.user.verified = true;
         await this.users.save(verification.user);
         await this.verifications.delete(verification.id);
         return { ok: true };
       }
-      return { ok: false, error: 'Verification Not found.' };
+      return { ok: false, error: 'Verification not found.' };
     } catch (error) {
-      return { ok: false, error };
+      return { ok: false, error: 'Could not verify email.' };
     }
   }
 }

@@ -14,6 +14,10 @@ import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { MailModule } from './mail/mail.module';
+import { Verification } from './users/entities/verification.entity';
+import { Restaurant } from './restaurants/entities/restaurant.entity';
+import { Category } from './restaurants/entities/category.entity';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -44,6 +48,7 @@ import { MailModule } from './mail/mail.module';
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
+      entities: [User, Verification, Restaurant, Category],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,

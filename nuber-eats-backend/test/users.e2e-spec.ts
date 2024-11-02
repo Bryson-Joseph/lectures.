@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from 'src/app.module';
+import { AppModule } from '../src/app.module';
 import { getConnection, Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 import { Verification } from 'src/users/entities/verification.entity';
 
 jest.mock('got', () => {
@@ -16,7 +16,7 @@ jest.mock('got', () => {
 const GRAPHQL_ENDPOINT = '/graphql';
 
 const testUser = {
-  email: 'jeff@rey.com',
+  email: 'nico@las.com',
   password: '12345',
 };
 
@@ -51,18 +51,17 @@ describe('UserModule (e2e)', () => {
   describe('createAccount', () => {
     it('should create account', () => {
       return publicTest(`
-          mutation {
-            createAccount(input: {
-              email:"${testUser.email}",
-              password:"${testUser.password}",
-              role:Owner
-            }) {
-              ok
-              error
-            }
+        mutation {
+          createAccount(input: {
+            email:"${testUser.email}",
+            password:"${testUser.password}",
+            role:Owner
+          }) {
+            ok
+            error
           }
-      }
-          `)
+        }
+        `)
         .expect(200)
         .expect((res) => {
           expect(res.body.data.createAccount.ok).toBe(true);
@@ -82,14 +81,18 @@ describe('UserModule (e2e)', () => {
               error
             }
           }
-      }
-          `)
+        `)
         .expect(200)
         .expect((res) => {
-          expect(res.body.data.createAccount.ok).toBe(false);
-          expect(res.body.data.createAccount.error).toBe(
-            'There is a user with that email already',
-          );
+          const {
+            body: {
+              data: {
+                createAccount: { ok, error },
+              },
+            },
+          } = res;
+          expect(ok).toBe(false);
+          expect(error).toBe('There is a user with that email already');
         });
     });
   });
@@ -107,8 +110,7 @@ describe('UserModule (e2e)', () => {
               token
             }
           }
-        }
-          `)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -134,8 +136,7 @@ describe('UserModule (e2e)', () => {
               token
             }
           }
-      
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -149,6 +150,7 @@ describe('UserModule (e2e)', () => {
         });
     });
   });
+
   describe('userProfile', () => {
     let userId: number;
     beforeAll(async () => {
@@ -157,17 +159,16 @@ describe('UserModule (e2e)', () => {
     });
     it("should see a user's profile", () => {
       return privateTest(`
-        {
-          userProfile(userId:${userId}){
-            ok
-            error
-            user {
-              id
+          {
+            userProfile(userId:${userId}){
+              ok
+              error
+              user {
+                id
+              }
             }
           }
-        }
-        
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -188,16 +189,16 @@ describe('UserModule (e2e)', () => {
     });
     it('should not find a profile', () => {
       return privateTest(`
-        {
-          userProfile(userId:666){
-            ok
-            error
-            user {
-              id
+          {
+            userProfile(userId:666){
+              ok
+              error
+              user {
+                id
+              }
             }
           }
-        }
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -217,13 +218,12 @@ describe('UserModule (e2e)', () => {
   describe('me', () => {
     it('should find my profile', () => {
       return privateTest(`
-        {
-          me {
-            email
+          {
+            me {
+              email
+            }
           }
-        }
-      
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -238,13 +238,12 @@ describe('UserModule (e2e)', () => {
     });
     it('should not allow logged out user', () => {
       return publicTest(`
-        {
-          me {
-            email
+          {
+            me {
+              email
+            }
           }
-        }
-      
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -257,18 +256,18 @@ describe('UserModule (e2e)', () => {
   });
 
   describe('editProfile', () => {
-    const NEW_EMAIL = 'jeff@rey.com';
+    const NEW_EMAIL = 'nico@new.com';
     it('should change email', () => {
       return privateTest(`
-          mutation{
-          editProfile(input:{
-          email:"${NEW_EMAIL}"
-          }){
-          ok
-          error     
-      }
-          }
-        }`)
+            mutation {
+              editProfile(input:{
+                email: "${NEW_EMAIL}"
+              }) {
+                ok
+                error
+              }
+            }
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -283,12 +282,13 @@ describe('UserModule (e2e)', () => {
         });
     });
     it('should have new email', () => {
-      return privateTest(`{
-          me {
-            email
+      return privateTest(`
+          {
+            me {
+              email
+            }
           }
-        }
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -319,7 +319,7 @@ describe('UserModule (e2e)', () => {
               error
             }
           }
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
@@ -343,7 +343,7 @@ describe('UserModule (e2e)', () => {
               error
             }
           }
-        }`)
+        `)
         .expect(200)
         .expect((res) => {
           const {
