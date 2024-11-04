@@ -33,7 +33,7 @@ export class Restaurant extends CoreEntity {
   @Field((type) => String)
   @Column()
   @IsString()
-  coverImag: string;
+  coverImg: string;
 
   @Field((type) => Category, { nullable: true })
   @ManyToOne((type) => Category, (category) => category.restaurants, {
