@@ -16,6 +16,7 @@ import {
   EditRestaurantInput,
   EditRestaurantOutput,
 } from './dtos/edit-restaurant.dto';
+import { RestaurantsInput, RestaurantsOutput } from './dtos/restaurants.dto';
 import { Category } from './entities/category.entity';
 import { Restaurant } from './entities/restaurant.entity';
 import { CategoryRepository } from './repositories/category.repository';
@@ -103,6 +104,7 @@ export class RestaurantService {
       const restaurant = await this.restaurants.findOne({
         where: { id: restaurantId },
       });
+
       if (!restaurant) {
         return {
           ok: false,
@@ -142,10 +144,9 @@ export class RestaurantService {
     }
   }
   countRestaurants(category: Category) {
-    return this.restaurants.count({
-      where: { category },
-    });
+    return this.restaurants.count({ where: { category } });
   }
+
   async findCategoryBySlug({
     slug,
     page,
@@ -154,14 +155,12 @@ export class RestaurantService {
       const category = await this.categories.findOne({
         where: { slug },
       });
-
       if (!category) {
         return {
           ok: false,
           error: 'Category not found',
         };
       }
-
       const restaurants = await this.restaurants.find({
         where: {
           category,
@@ -169,17 +168,37 @@ export class RestaurantService {
         take: 25,
         skip: (page - 1) * 25,
       });
-      category.restaurants = restaurants;
       const totalResults = await this.countRestaurants(category);
-
       return {
         ok: true,
+        restaurants,
         category,
+        totalPages: Math.ceil(totalResults / 25),
       };
     } catch {
       return {
         ok: false,
         error: 'Could not load category',
+      };
+    }
+  }
+
+  async allRestaurants({ page }: RestaurantsInput): Promise<RestaurantsOutput> {
+    try {
+      const [restaurants, totalResults] = await this.restaurants.findAndCount({
+        skip: (page - 1) * 25,
+        take: 25,
+      });
+      return {
+        ok: true,
+        results: restaurants,
+        totalPages: Math.ceil(totalResults / 25),
+        totalResults,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not load restaurants',
       };
     }
   }
