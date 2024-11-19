@@ -66,7 +66,13 @@ import { OrderItem } from './orders/order-items.entity';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
-      context: ({ req }) => ({ user: req['user'] }),
+      context: ({ req, connection }) => {
+        if (req) {
+          return { user: req['user'] };
+        } else {
+          console.log(connection);
+        }
+      },
       driver: ApolloDriver,
     }),
     JwtModule.forRoot({
