@@ -24,6 +24,8 @@ import { Dish } from './restaurants/entities/dish.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/order-items.entity';
+import { PaymentsModule } from './payments/payments.module';
+import { Payment } from './payments/entities/payment.entity';
 
 @Module({
   imports: [
@@ -62,6 +64,7 @@ import { OrderItem } from './orders/order-items.entity';
         Dish,
         Order,
         OrderItem,
+        Payment,
       ],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -87,6 +90,7 @@ import { OrderItem } from './orders/order-items.entity';
     RestaurantsModule,
     OrdersModule,
     CommonModule,
+    PaymentsModule,
   ],
   controllers: [],
   providers: [],
