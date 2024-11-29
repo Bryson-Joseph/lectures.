@@ -129,7 +129,7 @@ class App extends StatelessWidget {
                     name: 'Dollar',
                     code: 'USD',
                     amount: '55 622',
-                    icon: Icons.attach_money_sharp,
+                    icon: Icons.monetization_on_outlined,
                     isInverted: true,
                   ),
                 ),
