@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-// Stateful widget for the home screen, allowing dynamic UI updates.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -13,14 +12,11 @@ class _HomeScreenState extends State<HomeScreen> {
   static const twentyFiveMinutes = 1500;
   int totalSeconds = twentyFiveMinutes;
 
-  // Flag to track whether the timer is running.
   bool isRunning = false;
   int totalPomodoros = 0;
 
-  // Timer object to handle the countdown.
   late Timer timer;
 
-  // Called every second to decrease the time by 1.
   void onTick(Timer timer) {
     if (totalSeconds == 0) {
       setState(() {
@@ -36,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Starts the timer and updates the running state.
   void onStartPressed() {
     timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -47,11 +42,21 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Pauses the timer and updates the running state.
   void onPausePressed() {
-    timer.cancel(); // Stop the timer.
+    timer.cancel();
     setState(() {
       isRunning = false;
+    });
+  }
+
+  // Method to reset the timer
+  void onResetPressed() {
+    if (isRunning) {
+      timer.cancel();
+    }
+    setState(() {
+      isRunning = false;
+      totalSeconds = twentyFiveMinutes; // Reset the time
     });
   }
 
@@ -63,8 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Theme.of(context).colorScheme.surface, // Background color.
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         children: [
           Flexible(
@@ -84,13 +88,25 @@ class _HomeScreenState extends State<HomeScreen> {
           Flexible(
             flex: 3,
             child: Center(
-              child: IconButton(
-                iconSize: 120,
-                color: Theme.of(context).cardColor,
-                onPressed: isRunning ? onPausePressed : onStartPressed,
-                icon: Icon(isRunning
-                    ? Icons.pause_circle_outline
-                    : Icons.play_circle_outline),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    iconSize: 120,
+                    color: Theme.of(context).cardColor,
+                    onPressed: isRunning ? onPausePressed : onStartPressed,
+                    icon: Icon(isRunning
+                        ? Icons.pause_circle_outline
+                        : Icons.play_circle_outline),
+                  ),
+                  const SizedBox(width: 20), // Spacer between buttons
+                  IconButton(
+                    iconSize: 80, // Smaller reset button
+                    color: Theme.of(context).cardColor,
+                    onPressed: onResetPressed,
+                    icon: const Icon(Icons.refresh), // Reset icon
+                  ),
+                ],
               ),
             ),
           ),
@@ -105,13 +121,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Column(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center, // Center contents.
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           'Pomodoros',
                           style: TextStyle(
-                            fontSize: 20, //
+                            fontSize: 20,
                             fontWeight: FontWeight.w600,
                             color:
                                 Theme.of(context).textTheme.displayLarge!.color,
@@ -122,10 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: 58,
                             fontWeight: FontWeight.w600,
-                            color: Theme.of(context)
-                                .textTheme
-                                .displayLarge!
-                                .color, // Text color.
+                            color:
+                                Theme.of(context).textTheme.displayLarge!.color,
                           ),
                         ),
                       ],
@@ -134,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
