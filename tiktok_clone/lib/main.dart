@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/constants/gaps.dart';
+import 'package:tiktok_clone/constants/sizes.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const TikTokApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class TikTokApp extends StatelessWidget {
+  const TikTokApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tiktok Clone',
+      title: 'TikTok Clone',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+        primaryColor: const Color(0xFFE9435A),
       ),
-      home: Container(),
+      home: const Padding(
+        padding: EdgeInsets.all(Sizes.size14),
+        child: Row(children: [
+          Text('hello'),
+          Gaps.h20,
+          Text('hello'),
+        ]),
+      ),
     );
   }
 }
