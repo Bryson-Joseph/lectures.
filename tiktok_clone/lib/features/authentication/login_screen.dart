@@ -9,18 +9,22 @@ class LoginScreen extends StatelessWidget {
 
   void _onSignUpTap(BuildContext context) {
     Navigator.of(context).pop();
+
+    void onEmailLoginTap(BuildContext context) {
+      Navigator.of(context).push(MaterialPageRoute(builder: builder));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: const SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: Sizes.size40,
           ),
           child: Column(
-            children: const [
+            children: [
               Gaps.v80,
               Text(
                 "Log in to TikTok",
