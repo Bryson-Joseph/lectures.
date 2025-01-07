@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
   ) {}
+
   async canActivate(context: ExecutionContext) {
     const roles = this.reflector.get<AllowedRoles>(
       'roles',
