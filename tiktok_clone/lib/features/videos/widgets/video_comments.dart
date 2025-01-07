@@ -93,15 +93,40 @@ class _VideoCommentsState extends State<VideoComments> {
               width: MediaQuery.of(context).size.width,
               child: BottomAppBar(
                 color: Colors.white,
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundColor: Colors.grey.shade500,
-                      foregroundColor: Colors.white,
-                      child: const Text("Jeff"),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.size16,
+                    vertical: Sizes.size10,
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.grey.shade500,
+                        foregroundColor: Colors.white,
+                        child: const Text("Jeff"),
+                      ),
+                      Gaps.h10,
+                      Expanded(
+                        child: TextField(
+                          cursorColor: Theme.of(context).primaryColor,
+                          decoration: InputDecoration(
+                            hintText: "Add a comment...",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(Sizes.size12),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey.shade200,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: Sizes.size10,
+                              vertical: Sizes.size12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )
