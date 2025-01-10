@@ -1,37 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/inbox/activity_screen.dart';
 
 class InboxScreen extends StatelessWidget {
   const InboxScreen({super.key});
 
   void _onDmPressed() {}
 
+  void _onActivityTap(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ActivityScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        title: const Text("Inbox"),
+        title: const Text('Inbox'),
         actions: [
           IconButton(
-              onPressed: _onDmPressed,
-              icon: const FaIcon(FontAwesomeIcons.paperPlane)),
+            onPressed: _onDmPressed,
+            icon: const FaIcon(
+              FontAwesomeIcons.paperPlane,
+              size: Sizes.size20,
+            ),
+          )
         ],
       ),
       body: ListView(
         children: [
-          const ListTile(
-            title: Text(
-              "Activity",
+          ListTile(
+            onTap: () => _onActivityTap(context),
+            title: const Text(
+              'Activity',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: Sizes.size20,
+                fontSize: Sizes.size16,
               ),
             ),
-            trailing: FaIcon(
+            trailing: const FaIcon(
               FontAwesomeIcons.chevronRight,
-              size: Sizes.size16,
+              size: Sizes.size14,
               color: Colors.black,
             ),
           ),
@@ -50,29 +64,28 @@ class InboxScreen extends StatelessWidget {
                 child: FaIcon(
                   FontAwesomeIcons.users,
                   color: Colors.white,
-                  size: Sizes.size16,
                 ),
               ),
             ),
             title: const Text(
-              "New followers",
+              'New followers',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: Sizes.size14,
+                fontSize: Sizes.size16,
               ),
             ),
             subtitle: const Text(
-              "Messages from followers will appear here",
+              'Messages from followers will appear here.',
               style: TextStyle(
-                fontSize: Sizes.size12,
+                fontSize: Sizes.size14,
               ),
             ),
             trailing: const FaIcon(
               FontAwesomeIcons.chevronRight,
-              size: Sizes.size12,
+              size: Sizes.size14,
               color: Colors.black,
             ),
-          ),
+          )
         ],
       ),
     );
