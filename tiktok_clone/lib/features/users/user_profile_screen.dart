@@ -10,9 +10,13 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return const CustomScrollView(
+    return CustomScrollView(
       slivers: [
-        SliverAppBar(
+        const SliverAppBar(
+          snap: true,
+          floating: true,
+          pinned: true,
+          stretch: true,
           backgroundColor: Colors.teal,
           collapsedHeight: 80,
           expandedHeight: 200,
@@ -30,6 +34,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             title: Text("Bilkahyr❤️"),
           ),
         ),
+        SliverFixedExtentList(
+          delegate: SliverChildBuilderDelegate(
+            childCount: 50,
+            (context, index) => Container(
+              color: Colors.amber[100 * (index % 9)],
+              child: Align(
+                alignment: Alignment.center,
+                child: Text("Item $index"),
+              ),
+            ),
+          ),
+          itemExtent: 100,
+        )
       ],
     );
   }
