@@ -13,24 +13,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        const SliverAppBar(
-          snap: true,
-          floating: true,
+        SliverAppBar(
+          pinned: true,
+          stretch: true,
           backgroundColor: Colors.teal,
           collapsedHeight: 80,
           expandedHeight: 200,
           flexibleSpace: FlexibleSpaceBar(
-            stretchModes: [
-              StretchMode.zoomBackground,
+            stretchModes: const [
               StretchMode.blurBackground,
+              StretchMode.zoomBackground,
               StretchMode.fadeTitle,
             ],
-            background: Image(
-              image: NetworkImage(
-                  "https://www.vmcdn.ca/f/files/via/images/arts/soft-girl.jpg;w=960"),
+            background: Image.network(
+              "https://www.vmcdn.ca/f/files/via/images/arts/soft-girl.jpg;w=960",
               fit: BoxFit.cover,
             ),
-            title: Text("Bilkahyr❤️"),
+            title: const Text("Bikhayr❤️"),
           ),
         ),
         SliverFixedExtentList(
