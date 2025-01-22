@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/features/authentication/username_screen.dart';
+import 'package:tiktok_clone/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/utils.dart';
 
@@ -30,33 +31,40 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return OrientationBuilder(
       builder: (context, orientation) {
-        if (orientation == Orientation.landscape) {
+        /* if (orientation == Orientation.landscape) {
           return const Scaffold(
             body: Center(
-              child: Text("Please rotate your phone."),
+              child: Text('Plz rotate ur phone.'),
             ),
           );
-        }
+        } */
         return Scaffold(
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: Sizes.size36,
+                horizontal: Sizes.size40,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Gaps.v40,
+                  Gaps.v80,
                   Text(
                     "Sign up for TikTok",
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: GoogleFonts.abrilFatface(
+                      textStyle: const TextStyle(
+                        fontSize: Sizes.size24,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                   Gaps.v20,
-                  Opacity(
+                  const Opacity(
                     opacity: 0.7,
                     child: Text(
                       "Create a profile, follow other accounts, make your own videos, and more.",
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: TextStyle(
+                        fontSize: Sizes.size16,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -69,11 +77,11 @@ class SignUpScreen extends StatelessWidget {
                         text: "Use email & password",
                       ),
                     ),
-                    Gaps.v20,
+                    Gaps.v16,
                     const AuthButton(
                       icon: FaIcon(FontAwesomeIcons.apple),
                       text: "Continue with Apple",
-                    ),
+                    )
                   ],
                   if (orientation == Orientation.landscape)
                     Row(
@@ -87,13 +95,13 @@ class SignUpScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Gaps.h20,
+                        Gaps.h16,
                         const Expanded(
                           child: AuthButton(
                             icon: FaIcon(FontAwesomeIcons.apple),
                             text: "Continue with Apple",
                           ),
-                        ),
+                        )
                       ],
                     )
                 ],
