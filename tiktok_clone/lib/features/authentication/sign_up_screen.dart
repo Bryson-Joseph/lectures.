@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
@@ -14,8 +15,7 @@ class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   void _onLoginTap(BuildContext context) async {
-    final result = await Navigator.pushNamed(context, LoginScreen.routeName);
-    print(" use came back.");
+    context.push(LoginScreen.routeName);
   }
 
   void _onEmailTap(BuildContext context) {
@@ -41,7 +41,7 @@ class SignUpScreen extends StatelessWidget {
     //       }),
     // );
 
-    Navigator.pushNamed(context, UsernameScreen.routeName);
+    context.push("/users/lynn?show=likes");
   }
 
   @override
