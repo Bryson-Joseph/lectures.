@@ -10,7 +10,8 @@ import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static const routeName = "/";
+  static const routeName = "signUp";
+  static const routeURL = "/";
 
   const SignUpScreen({super.key});
 
@@ -41,7 +42,7 @@ class SignUpScreen extends StatelessWidget {
     //       }),
     // );
 
-    context.push("/users/lynn?show=likes");
+    context.pushNamed(UsernameScreen.routeName);
   }
 
   @override
