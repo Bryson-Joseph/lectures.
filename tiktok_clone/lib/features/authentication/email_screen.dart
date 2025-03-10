@@ -86,9 +86,9 @@ class _EmailScreenState extends State<EmailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gaps.v40,
-              Text(
-                "What is your email, ${widget.username}?",
-                style: const TextStyle(
+              const Text(
+                "What is your email, ?",
+                style: TextStyle(
                   fontSize: Sizes.size24,
                   fontWeight: FontWeight.w700,
                 ),
